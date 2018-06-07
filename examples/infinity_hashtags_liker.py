@@ -24,6 +24,8 @@ while hashtags_tmp.find(" ") >= 0:
     hashtags_tmp = hashtags_tmp[pos+1:]
 hashtags.append(hashtags_tmp) # Appending to array last hashtag
 
+print("SETTINGS: max_likes: {}, delay: {}".format(settings['max_likes_per_day'], settings['like_delay']))
+
 bot = Bot(max_likes_per_day=settings['max_likes_per_day'], like_delay=settings['like_delay'])
 bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
