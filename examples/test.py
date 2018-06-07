@@ -2,8 +2,14 @@ import os
 import sys
 import time
 
-sys.path.append(os.path.join(sys.path[0], '../'))
-import my_get_settings
+a = " top_kherson vip_kherson kherson   "
+b = a.strip()
 
-settings = my_get_settings.get_settings(1)
-print(settings)
+array = []
+while b.find(" ") >= 0:
+    pos = b.find(" ")
+    array.append(b[:pos])
+    b = b[pos+1:]
+array.append(b)
+
+print(array)
