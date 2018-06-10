@@ -1,6 +1,10 @@
 from subprocess import Popen, PIPE
+from datetime import datetime
 from sys import platform # mac or linux
 import time
+
+# Array of running scripts
+running = []
 
 # Checking launch platform
 if "darwin" in platform.lower():
@@ -12,9 +16,6 @@ elif "linux" in platform.lower():
 else:
     print("This platform is not supported. Exiting...")
     exit()
-
-# Array of running scripts
-running = []
 
 # Return last digit
 def lastdigit(int_):
@@ -61,13 +62,13 @@ def script_path(script):
 
 # Function returns path to log file
 def logfile(id, script):
-    return "{}/instabot/accs/{}/{}.log".format(path_, id, script)
+    return "{}/instabot/accs/{}/logs/{}.log".format(path_, id, script)
 
 log = dict()
 # Opening log file with write option
 def openlog(id, script):
     log[id] = dict() # making it 2d
-    log[id][script] = open(logfile(id, script), 'w')
+    log[id][script] = open(logfile(id, script), 'a')
     return log[id][script]
 
 procs = dict()
@@ -76,22 +77,32 @@ def start(id, script):
     procs[id] = dict() # making it 2d
     procs[id][script] = Popen(script_path(script), shell=True, stdout=openlog(id, script), stderr=PIPE)
     if procs[id][script].poll() == None:
-        print("Bot {}-'{}' was started successfully. PID: {}".format(id, script, procs[id][script].pid))
+        print("Bot {}-'{}' was started successfully. PID: {}".format(id, script.upper(), procs[id][script].pid))
         running.append(id * 10 + scripttonum(script))
 
-# Check are scripts still running
+# Stopping python script
+def stop(id, script):
+    procs[id][script].kill()
+    print("Bot {}-'{}' was stopped by request.".format(id, script.upper()))
+    running.remove(id * 10 + scripttonum(script))
+
+# Check are scripts still running. If no - restarts
 def checkrun():
     for num in running:
-        ## procs[id][script]
-        if procs[removelastdigit(num)][numtoscript(lastdigit(num))].poll() != None:
+        id = removelastdigit(num)
+        script = numtoscript(lastdigit(num))
+        if procs[id][script].poll() != None:
             running.remove(num)
-            print("Bot {}-'{}' was closed".format(removelastdigit(num), numtoscript(lastdigit(num))))
+            print("Bot {}-'{}' was closed. Trying to restart...".format(id, script.upper()))
+            start(id, script)
 
+# Print working scripts
+def print_running():
+    print("NOW RUNNING:")
+    for num in running:
+        id = removelastdigit(num)
+        script = numtoscript(lastdigit(num))
+        print("Bot {} - {}". format(id, script.upper()))
 
-start(1, "like")
-start(2, "follow")
-
-while(len(running)):
-    checkrun()
-    print(running)
-    time.sleep(1)
+def print_running_array():
+    print("Running: {}".format(running))
