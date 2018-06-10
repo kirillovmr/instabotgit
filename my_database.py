@@ -27,7 +27,7 @@ def get_settings(bot_id_):
     cursor = cnx.cursor(buffered=True)
 
     # Executing query, storing answer in 'buff'
-    get_query = ("SELECT * FROM bot_settings WHERE bot_id={}".format(bot_id_))
+    get_query = ("SELECT * FROM bots WHERE bot_id={}".format(bot_id_))
     cursor.execute(get_query)
     buff = cursor
 
