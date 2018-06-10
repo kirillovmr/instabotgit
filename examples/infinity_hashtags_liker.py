@@ -5,14 +5,14 @@ import time
 
 sys.path.append(os.path.join(sys.path[0], '../'))
 from instabot import Bot
-import my_get_settings
+import my_database
 
 parser = argparse.ArgumentParser(add_help=True)
 parser.add_argument('-bot_id', type=str, help="bot_id")
 args = parser.parse_args()
 
 # Receiving settings for acc
-settings = my_get_settings.get_settings(args.bot_id)
+settings = my_database.get_settings(args.bot_id)
 
 # Putting hashtags in array
 hashtags_tmp = settings['like_hashtags']

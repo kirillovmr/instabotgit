@@ -1,4 +1,4 @@
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, call
 from datetime import datetime
 from sys import platform # mac or linux
 import time
@@ -57,8 +57,8 @@ def numtoscript(int_):
 
 # Function returns path to script
 # script = like, follow, unfollow, comment, direct
-def script_path(script):
-    return "python3 {}/instabot/scripts/{}.py".format(path_, script)
+def script_path(script, id):
+    return "python3 {}/instabot/scripts/{}.py -bot_id={}".format(path_, script, id)
 
 # Function returns path to log file
 def logfile(id, script):
@@ -75,7 +75,8 @@ procs = dict()
 # Starting python script
 def start(id, script):
     procs[id] = dict() # making it 2d
-    procs[id][script] = Popen(script_path(script), shell=True, stdout=openlog(id, script), stderr=PIPE)
+    procs[id][script] = Popen(script_path(script, id), shell=True, stdout=openlog(id, script), stderr=PIPE)
+    # procs[id][script] = call(script_path(script, id), shell=True)
     if procs[id][script].poll() == None:
         print("Bot {}-'{}' was started successfully. PID: {}".format(id, script.upper(), procs[id][script].pid))
         running.append(id * 10 + scripttonum(script))

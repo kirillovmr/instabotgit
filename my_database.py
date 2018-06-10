@@ -7,14 +7,27 @@ USER = 'belyy00_bot'
 PASS = 'Kirillov44'
 DB = 'belyy00_bot'
 
+bot_id_col = 0
+foll_s_col = 1
+like_s_col = 2
+comm_s_col = 3
+dire_s_col = 4
+foll_a_col = 5
+like_a_col = 6
+comm_a_col = 7
+dire_a_col = 8
+
+def db_connect():
+    return mysql.connector.connect(host=HOST, user=USER, password=PASS, database=DB)
+
 # Return dict() with settings for bot_id
-def get_settings(bot_id):
+def get_settings(bot_id_):
     # Connecting to DataBase
-    cnx = mysql.connector.connect(host=HOST, user=USER, password=PASS, database=DB)
+    cnx = db_connect()
     cursor = cnx.cursor(buffered=True)
 
     # Executing query, storing answer in 'buff'
-    get_query = ("SELECT * FROM bot_settings WHERE bot_id={}".format(bot_id))
+    get_query = ("SELECT * FROM bot_settings WHERE bot_id={}".format(bot_id_))
     cursor.execute(get_query)
     buff = cursor
 
@@ -52,7 +65,7 @@ def get_settings(bot_id):
 # Change values in Bot_status table
 def update_db(param, value, bot_id):
     # Connecting to DataBase
-    cnx = mysql.connector.connect(host=HOST, user=USER, password=PASS, database=DB)
+    cnx = db_connect()
     cursor = cnx.cursor(buffered=True)
 
     q = ("UPDATE bot_status SET {}={} WHERE bot_id={}".format(param, value, bot_id))
@@ -67,7 +80,7 @@ def update_db(param, value, bot_id):
 # Set all actual values to 0 in database. Use it after manager restart
 def set_actual_zero():
     # Connecting to DataBase
-    cnx = mysql.connector.connect(host=HOST, user=USER, password=PASS, database=DB)
+    cnx = db_connect()
     cursor = cnx.cursor(buffered=True)
 
     q = ("UPDATE bot_status SET follow_a=0, like_a=0, comment_a=0, direct_a=0")
@@ -82,7 +95,7 @@ def set_actual_zero():
 # Get statuses from database and start/stop bots
 def get_bots_status():
     # Connecting to DataBase
-    cnx = mysql.connector.connect(host=HOST, user=USER, password=PASS, database=DB)
+    cnx = db_connect()
     cursor = cnx.cursor(buffered=True)
 
     # Executing query, storing answer in 'buff'
@@ -92,14 +105,14 @@ def get_bots_status():
     # Going through status and start/stop appropriate bots
     settings = cursor
     for data in settings:
-        if data[2] != data[6]:
-            if data[2] == 1 and data[6] == 0:
-                start(data[0], "like")
-                update_db("like_a", 1, data[0])
+        if data[like_s_col] != data[like_a_col]:
+            if data[like_s_col] == 1 and data[like_a_col] == 0:
+                start(data[bot_id_col], "like")
+                update_db("like_a", 1, data[bot_id_col])
 
-            elif data[2] == 0 and data[6] == 1:
-                stop(data[0], "like")
-                update_db("like_a", 0, data[0])
+            elif data[like_s_col] == 0 and data[like_a_col] == 1:
+                stop(data[bot_id_col], "like")
+                update_db("like_a", 0, data[bot_id_col])
 
     # Closing connection
     cursor.close()
