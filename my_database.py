@@ -2,10 +2,12 @@ import mysql.connector
 from my_func import *
 
 # Variables to login into Database
-HOST = 'belyy00.mysql.tools'
-USER = 'belyy00_bot'
-PASS = 'Kirillov44'
-DB = 'belyy00_bot'
+config = {
+  'user': 'belyy00_bot',
+  'password': 'Kirillov44',
+  'host': 'belyy00.mysql.tools',
+  'database': 'belyy00_bot'
+}
 
 bot_id_col = 0
 foll_s_col = 1
@@ -18,7 +20,7 @@ comm_a_col = 7
 dire_a_col = 8
 
 def db_connect():
-    return mysql.connector.connect(host=HOST, user=USER, password=PASS, database=DB)
+    return mysql.connector.connect(**config)
 
 # Return dict() with settings for bot_id
 def get_settings(bot_id_):
@@ -71,7 +73,7 @@ def update_db(param, value, bot_id):
     q = ("UPDATE bot_status SET {}={} WHERE bot_id={}".format(param, value, bot_id))
     cursor.execute(q)
     cnx.commit()
-    print("BOT ID {} | Updated {} with value {}".format(bot_id, param, value))
+    print("{} BOT ID {} | Updated {} with value {}".format(now_time(), bot_id, param, value))
 
     # Closing connection
     cursor.close()
@@ -86,7 +88,7 @@ def set_actual_zero():
     q = ("UPDATE bot_status SET follow_a=0, like_a=0, comment_a=0, direct_a=0")
     cursor.execute(q)
     cnx.commit()
-    print("All actual values were updated to 0.")
+    print("{} All actual values were updated to 0.".format(now_time()))
 
     # Closing connection
     cursor.close()
@@ -98,7 +100,7 @@ def get_bots_status():
     cnx = db_connect()
     cursor = cnx.cursor(buffered=True)
 
-    # Executing query, storing answer in 'buff'
+    # Executing query
     get_query = ("SELECT * FROM bot_status")
     cursor.execute(get_query)
 
@@ -109,7 +111,6 @@ def get_bots_status():
             if data[like_s_col] == 1 and data[like_a_col] == 0:
                 start(data[bot_id_col], "like")
                 update_db("like_a", 1, data[bot_id_col])
-
             elif data[like_s_col] == 0 and data[like_a_col] == 1:
                 stop(data[bot_id_col], "like")
                 update_db("like_a", 0, data[bot_id_col])
