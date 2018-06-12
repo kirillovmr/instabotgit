@@ -6,12 +6,20 @@ while True:
     time.sleep(1)
 
 '''
-[Desktop Entry]
-Version=1.0
-Encoding=UTF-8
-Name=Radio
-Comment=
-Exec=sudo python /home/pi/myprog/radio.py
-Terminal=false
-Type=Application
+[Unit]
+Description=Sonarr Daemon
+After=network.target
+
+[Service]
+User=nzbdrone
+Group=nzbdrone
+
+Type=simple
+ExecStart=/usr/bin/mono /opt/NzbDrone/NzbDrone.exe -nobrowser
+TimeoutStopSec=20
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
 '''
