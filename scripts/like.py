@@ -5,6 +5,7 @@ import argparse
 import os
 import sys
 import time
+import random
 from sys import platform # mac or linux
 
 if "darwin" in platform.lower():
@@ -38,6 +39,9 @@ while hashtags_tmp.find(" ") >= 0:
     hashtags.append(hashtags_tmp[:pos])
     hashtags_tmp = hashtags_tmp[pos+1:]
 hashtags.append(hashtags_tmp) # Appending to array last hashtag
+
+# Mixing array
+random.shuffle(hashtags)
 
 print("SETTINGS: max_likes: {}, delay: {}".format(settings['max_likes_per_day'], settings['like_delay']))
 
