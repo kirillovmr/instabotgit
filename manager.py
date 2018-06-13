@@ -17,4 +17,4 @@ while True:
     # Print running scripts
     print_running_array()
 
-    time.sleep(20)
+    time.sleep(30)
