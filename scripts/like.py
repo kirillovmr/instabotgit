@@ -1,11 +1,11 @@
 """
     Bot - Infinity hashtags liker.
 """
-import argparse
 import os
 import sys
 import time
 import random
+import argparse
 from sys import platform # mac or linux
 
 if "darwin" in platform.lower():
@@ -23,6 +23,7 @@ sys.path.append(path_)
 from instabot import Bot
 import my_database
 
+# Parsing arguments
 parser = argparse.ArgumentParser(add_help=True)
 parser.add_argument('-bot_id', type=int, help="bot_id")
 args = parser.parse_args()
@@ -33,7 +34,6 @@ settings = my_database.get_settings(args.bot_id)
 # Putting hashtags in array
 hashtags_tmp = settings['like_hashtags']
 hashtags = [] # Initializing empty array
-
 while hashtags_tmp.find(" ") >= 0:
     pos = hashtags_tmp.find(" ")
     hashtags.append(hashtags_tmp[:pos])

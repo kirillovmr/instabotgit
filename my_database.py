@@ -18,6 +18,8 @@ foll_a_col = 5
 like_a_col = 6
 comm_a_col = 7
 dire_a_col = 8
+repo_s_col = 9
+repo_a_col = 10
 
 def db_connect():
     return mysql.connector.connect(**config)
@@ -50,10 +52,11 @@ def get_settings(bot_id_):
         settings['unfollow_delay'] = data[10]
         settings['comment_delay'] = data[11]
         settings['message_delay'] = data[12]
-        settings['check_new_followers_delay'] = data[13]
-        settings['comment_location'] = data[14].strip()
-        settings['follow_followers'] = data[15].strip()
-        settings['like_hashtags'] = data[16].strip()
+        settings['repost_delay'] = data[13]
+        settings['check_new_followers_delay'] = data[14]
+        settings['comment_location'] = data[15].strip()
+        settings['follow_followers'] = data[16].strip()
+        settings['like_hashtags'] = data[17].strip()
         # add comments
         # add messages
 
@@ -85,7 +88,7 @@ def set_actual_zero():
     cnx = db_connect()
     cursor = cnx.cursor(buffered=True)
 
-    q = ("UPDATE bot_status SET follow_a=0, like_a=0, comment_a=0, direct_a=0")
+    q = ("UPDATE bot_status SET follow_a=0, like_a=0, comment_a=0, direct_a=0, repost_a=0")
     cursor.execute(q)
     cnx.commit()
     print("{} All actual values were updated to 0.".format(now_time()))
@@ -107,6 +110,7 @@ def get_bots_status():
     # Going through status and start/stop appropriate bots
     settings = cursor
     for data in settings:
+        # LIKES
         if data[like_s_col] != data[like_a_col]:
             if data[like_s_col] == 1 and data[like_a_col] == 0:
                 start(data[bot_id_col], "like")
@@ -114,6 +118,22 @@ def get_bots_status():
             elif data[like_s_col] == 0 and data[like_a_col] == 1:
                 stop(data[bot_id_col], "like")
                 update_db("like_a", 0, data[bot_id_col])
+        # REPOST
+        if data[repo_s_col] != data[repo_a_col]:
+            if data[repo_s_col] == 1 and data[repo_a_col] == 0:
+                start(data[bot_id_col], "repost")
+                update_db("repost_a", 1, data[bot_id_col])
+            elif data[repo_s_col] == 0 and data[repo_a_col] == 1:
+                stop(data[bot_id_col], "repost")
+                update_db("repost_a", 0, data[bot_id_col])
+        # FOLLOW
+        if data[foll_s_col] != data[foll_a_col]:
+            if data[foll_s_col] == 1 and data[foll_a_col] == 0:
+                start(data[bot_id_col], "follow")
+                update_db("follow_a", 1, data[bot_id_col])
+            elif data[foll_s_col] == 0 and data[foll_a_col] == 1:
+                stop(data[bot_id_col], "follow")
+                update_db("follow_a", 0, data[bot_id_col])
 
     # Closing connection
     cursor.close()

@@ -40,6 +40,8 @@ def scripttonum(script):
         return 4
     elif script == "direct":
         return 5
+    elif script == "repost":
+        return 6
     else:
         print("{} ERROR! scripttpnum() func cant parse {} param.".format(now_time(), script))
 
@@ -55,6 +57,8 @@ def numtoscript(int_):
         return "comment"
     elif int_ == 5:
         return "direct"
+    elif int_ == 6:
+        return "repost"
     else:
         print("{} ERROR! numtoscript() func cant parse '{}' param.".format(now_time(), int_))
 
@@ -77,7 +81,12 @@ def openlog(id, script):
 procs = dict()
 # Starting python script
 def start(id, script):
-    procs[id] = dict() # making it 2d
+    # Making array 2d only once
+    try:
+        type(procs[id])
+    except KeyError:
+        procs[id] = dict() # making it 2d
+
     procs[id][script] = Popen(script_path(script, id), shell=True, stdout=openlog(id, script), stderr=PIPE)
     # procs[id][script] = call(script_path(script, id), shell=True)
     if procs[id][script].poll() == None:
