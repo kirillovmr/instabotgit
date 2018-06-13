@@ -4,6 +4,8 @@ from my_func import *
 # Set all actual values to 0 in database.
 set_actual_zero()
 
+# time.sleep(100)
+
 while True:
 
     # Get statuses from database and start/stop bots
@@ -15,4 +17,4 @@ while True:
     # Print running scripts
     print_running_array()
 
-    time.sleep(30)
+    time.sleep(20)

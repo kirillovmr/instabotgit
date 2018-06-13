@@ -9,6 +9,10 @@ config = {
   'database': 'belyy00_bot'
 }
 
+db = {'cnx': 0, 'cursor': 0}
+db['cnx'] = mysql.connector.connect(**config)
+db['cursor'] = db['cnx'].cursor(buffered=True)
+
 bot_id_col = 0
 foll_s_col = 1
 like_s_col = 2
@@ -26,14 +30,10 @@ def db_connect():
 
 # Return dict() with settings for bot_id
 def get_settings(bot_id_):
-    # Connecting to DataBase
-    cnx = db_connect()
-    cursor = cnx.cursor(buffered=True)
-
     # Executing query, storing answer in 'buff'
     get_query = ("SELECT * FROM bots WHERE bot_id={}".format(bot_id_))
-    cursor.execute(get_query)
-    buff = cursor
+    db['cursor'].execute(get_query)
+    buff = db['cursor']
 
     # Initializing settings dictionary
     settings = dict()
@@ -60,55 +60,31 @@ def get_settings(bot_id_):
         # add comments
         # add messages
 
-    # Closing connection
-    cursor.close()
-    cnx.close()
-
     # Returning settings dictionary
     return settings
 
 # Change values in Bot_status table
 def update_db(param, value, bot_id):
-    # Connecting to DataBase
-    cnx = db_connect()
-    cursor = cnx.cursor(buffered=True)
-
     q = ("UPDATE bot_status SET {}={} WHERE bot_id={}".format(param, value, bot_id))
-    cursor.execute(q)
-    cnx.commit()
+    db['cursor'].execute(q)
+    db['cnx'].commit()
     print("{} BOT ID {} | Updated {} with value {}".format(now_time(), bot_id, param, value))
-
-    # Closing connection
-    cursor.close()
-    cnx.close()
 
 # Set all actual values to 0 in database. Use it after manager restart
 def set_actual_zero():
-    # Connecting to DataBase
-    cnx = db_connect()
-    cursor = cnx.cursor(buffered=True)
-
     q = ("UPDATE bot_status SET follow_a=0, like_a=0, comment_a=0, direct_a=0, repost_a=0")
-    cursor.execute(q)
-    cnx.commit()
+    db['cursor'].execute(q)
+    db['cnx'].commit()
     print("{} All actual values were updated to 0.".format(now_time()))
-
-    # Closing connection
-    cursor.close()
-    cnx.close()
 
 # Get statuses from database and start/stop bots
 def get_bots_status():
-    # Connecting to DataBase
-    cnx = db_connect()
-    cursor = cnx.cursor(buffered=True)
-
     # Executing query
     get_query = ("SELECT * FROM bot_status")
-    cursor.execute(get_query)
+    db['cursor'].execute(get_query)
 
     # Going through status and start/stop appropriate bots
-    settings = cursor
+    settings = db['cursor']
     for data in settings:
         # LIKES
         if data[like_s_col] != data[like_a_col]:
@@ -134,7 +110,3 @@ def get_bots_status():
             elif data[foll_s_col] == 0 and data[foll_a_col] == 1:
                 stop(data[bot_id_col], "follow")
                 update_db("follow_a", 0, data[bot_id_col])
-
-    # Closing connection
-    cursor.close()
-    cnx.close()
