@@ -105,7 +105,7 @@ def repost_photo(bot, new_media_id, path=POSTED_MEDIAS):
         return False
     try:
         with open(photo_path[:-3] + 'txt', 'r', encoding="utf8") as f:
-        text = ''.join(f.readlines())
+            text = ''.join(f.readlines())
     except TypeError:
         update_posted_medias(new_media_id, path)
         bot.logger.info('ERROR. Ignore this photo')
