@@ -10,19 +10,6 @@ from tqdm import tqdm
 from sys import platform # mac or linux
 from datetime import datetime
 
-author_caption = '''Спасибо за фото {}
-⠀
-Отмечай на фото @rich_kherson или ставь хештег #rich_kherson и попадай к нам в ленту!
-⠀
-#херсон #kherson #украина #top_kherson_people #лето'''
-
-alt_caption = '''Солнечный привет от @rich_kherson !
-⠀
-Отмечай на фото @rich_kherson или ставь хештег #rich_kherson и попадай к нам в ленту!
-⠀
-#херсон #kherson #украина #top_kherson_people #лето'''
-users = ['vip_kherson', 'top_kherson']
-user = []
 posted = 0
 
 if "darwin" in platform.lower():
@@ -137,9 +124,9 @@ def return_author(your_text):
 def edit_caption(your_text):
     author = return_author(your_text)
     if author != -1:
-        caption = author_caption.format(author)
+        caption = user_caption.format(author)
     else:
-        caption = alt_caption
+        caption = user_caption.format("@{}".format(settings["login"]))
     return caption
 
 # Function from bot/bot_photo.py
@@ -170,6 +157,18 @@ args = parser.parse_args()
 
 # Receiving settings for acc
 settings = get_settings(args.bot_id)
+user_caption = settings["caption"]
+
+# Putting donors in array
+users_tmp = settings['donors']
+users = [] # Initializing empty array
+user = [] # Required!
+while users_tmp.find(" ") >= 0:
+    pos = users_tmp.find(" ")
+    users.append(users_tmp[:pos])
+    users_tmp = users_tmp[pos+1:]
+# Appending to array last hashtag
+users.append(users_tmp)
 
 # Setting delay between posts in minutes
 delay_between_posts = settings["repost_delay"]

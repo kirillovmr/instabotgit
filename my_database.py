@@ -56,6 +56,8 @@ def get_settings(bot_id_):
         settings['comment_location'] = data[15].strip()
         settings['follow_followers'] = data[16].strip()
         settings['like_hashtags'] = data[17].strip()
+        settings['caption'] = data[18].strip()
+        settings['donors'] = data[19].strip()
         # add comments
         # add messages
 
