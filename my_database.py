@@ -2,10 +2,10 @@ import mysql.connector
 from my_func import *
 
 config = {
-  'user': 'belyy00_bot',
+  'user': 'belyy00_ibot',
   'password': 'Kirillov44',
   'host': 'belyy00.mysql.tools',
-  'database': 'belyy00_bot'
+  'database': 'belyy00_ibot'
 }
 
 db = {'cnx': 0, 'cursor': 0}
