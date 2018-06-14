@@ -1,6 +1,12 @@
 import mysql.connector
 from my_func import *
-from config import *
+
+config = {
+  'user': 'belyy00_bot',
+  'password': 'Kirillov44',
+  'host': 'belyy00.mysql.tools',
+  'database': 'belyy00_bot'
+}
 
 db = {'cnx': 0, 'cursor': 0}
 db['cnx'] = mysql.connector.connect(**config)
