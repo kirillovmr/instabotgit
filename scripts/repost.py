@@ -100,8 +100,9 @@ def repost_photo(bot, new_media_id, path=POSTED_MEDIAS):
         bot.logger.warning("Media {0} was uploaded earlier".format(new_media_id))
         return False
     photo_path = download_photo(media_id=new_media_id, save_description=True)
-    if not photo_path:
-        return False
+    time.sleep(5)
+    # if not photo_path:
+    #     return False
     with open(photo_path[:-3] + 'txt', 'r', encoding="utf8") as f:
         text = ''.join(f.readlines())
     if bot.upload_photo(photo_path, text):
