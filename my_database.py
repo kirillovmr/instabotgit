@@ -1,13 +1,6 @@
 import mysql.connector
 from my_func import *
-
-# Variables to login into Database
-config = {
-  'user': 'belyy00_bot',
-  'password': 'Kirillov44',
-  'host': 'belyy00.mysql.tools',
-  'database': 'belyy00_bot'
-}
+from config import *
 
 db = {'cnx': 0, 'cursor': 0}
 db['cnx'] = mysql.connector.connect(**config)
@@ -94,7 +87,7 @@ def get_bots_status():
             elif data[like_s_col] == 0 and data[like_a_col] == 1:
                 stop(data[bot_id_col], "like")
                 update_db("like_a", 0, data[bot_id_col])
-        # REPOST 
+        # REPOST
         if data[repo_s_col] != data[repo_a_col]:
             if data[repo_s_col] == 1 and data[repo_a_col] == 0:
                 start(data[bot_id_col], "repost")
