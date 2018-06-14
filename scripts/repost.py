@@ -4,6 +4,7 @@
 import os
 import sys
 import time
+import random
 import argparse
 import subprocess
 from tqdm import tqdm
@@ -169,6 +170,9 @@ while users_tmp.find(" ") >= 0:
     users_tmp = users_tmp[pos+1:]
 # Appending to array last hashtag
 users.append(users_tmp)
+
+# Mixing array
+random.shuffle(users)
 
 # Setting delay between posts in minutes
 delay_between_posts = settings["repost_delay"]
