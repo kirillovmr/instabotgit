@@ -75,7 +75,10 @@ log = dict()
 # Opening log file with write option
 def openlog(id, script):
     log[id] = dict() # making it 2d
-    log[id][script] = open(logfile(id, script), 'a')
+    try:
+        log[id][script] = open(logfile(id, script), 'a')
+    except:
+        log[id][script] = open(logfile(id, script), 'w')
     return log[id][script]
 
 procs = dict()
