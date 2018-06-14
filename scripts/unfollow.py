@@ -1,5 +1,5 @@
 """
-    Bot - Follow user followers
+    Bot - Unfollow everyone
 """
 import os
 import sys
@@ -31,26 +31,13 @@ args = parser.parse_args()
 # Receiving settings for acc
 settings = my_database.get_settings(args.bot_id)
 
-# Putting donor accounts in array
-accs_tmp = settings['follow_followers']
-accs = [] # Initializing empty array
-while accs_tmp.find(" ") >= 0:
-    pos = accs_tmp.find(" ")
-    accs.append(accs_tmp[:pos])
-    accs_tmp = accs_tmp[pos+1:]
-accs.append(accs_tmp) # Appending to array last hashtag
-
-print("SETTINGS: follow_followers_of: {}, delay: {}, per_day: {}".format(accs, settings['follow_delay'], settings['max_follows_per_day']))
+print("SETTINGS: unfollow_delay: {}, per_day: {}".format(settings['unfollow_delay'], settings['max_unfollows_per_day']))
 
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 
-bot = Bot(max_follows_per_day=settings['max_follows_per_day'],
-        follow_delay=settings['follow_delay'], max_following_to_followers_ratio=4,
-        max_followers_to_following_ratio=20, filter_business_accounts=False,
-        max_followers_to_follow=5000, max_following_to_follow=7500,)
+bot = Bot(max_unfollows_per_day=settings['max_unfollows_per_day'], unfollow_delay=settings['unfollow_delay'])
 bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 
-for username in accs:
-    bot.follow_followers(username)
+bot.unfollow_everyone()

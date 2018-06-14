@@ -178,6 +178,7 @@ bot = Bot()
 bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 
+# Infinite cycle
 while True:
     # Getting the time of last photo posted
     time_post = last_post_time()

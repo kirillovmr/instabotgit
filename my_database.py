@@ -110,3 +110,19 @@ def get_bots_status():
             elif data[foll_s_col] == 0 and data[foll_a_col] == 1:
                 stop(data[bot_id_col], "follow")
                 update_db("follow_a", 0, data[bot_id_col])
+            elif data[foll_s_col] == 2 and data[foll_a_col] == 0:
+                start(data[bot_id_col], "unfollow")
+                update_db("follow_a", 2, data[bot_id_col])
+            elif data[foll_s_col] == 0 and data[foll_a_col] == 2:
+                stop(data[bot_id_col], "unfollow")
+                update_db("follow_a", 0, data[bot_id_col])
+            elif data[foll_s_col] == 2 and data[foll_a_col] == 1:
+                stop(data[bot_id_col], "follow")
+                time.sleep(5)
+                start(data[bot_id_col], "unfollow")
+                update_db("follow_a", 2, data[bot_id_col])
+            elif data[foll_s_col] == 1 and data[foll_a_col] == 2:
+                stop(data[bot_id_col], "unfollow")
+                time.sleep(5)
+                start(data[bot_id_col], "follow")
+                update_db("follow_a", 1, data[bot_id_col])
