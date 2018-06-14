@@ -101,10 +101,14 @@ def repost_photo(bot, new_media_id, path=POSTED_MEDIAS):
         return False
     photo_path = download_photo(media_id=new_media_id, save_description=True)
     time.sleep(5)
-    # if not photo_path:
-    #     return False
-    with open(photo_path[:-3] + 'txt', 'r', encoding="utf8") as f:
+    if not photo_path:
+        return False
+    try:
+        with open(photo_path[:-3] + 'txt', 'r', encoding="utf8") as f:
         text = ''.join(f.readlines())
+    except TypeError:
+        update_posted_medias(new_media_id, path)
+        bot.logger.info('ERROR. Ignore this photo')
     if bot.upload_photo(photo_path, text):
         update_posted_medias(new_media_id, path)
         bot.logger.info('Media_id {0} is saved in {1}'.format(new_media_id, path))
