@@ -1,55 +1,14 @@
-running = dict()
-running[1] = []
-running[1].append("comment")
-running[1].append("like")
-running[2] = []
-running[2].append("1")
-running[2].remove("1")
-running[4] = []
+import os
 
-# print(running)
+path_ = "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages"
 
-# print(len(running[1]))
+# Function returns path to log file
+def logfile(id, script):
+    return "{}/instabot/accs/{}/logs/{}.log".format(path_, id, script)
 
-a = 143
+dir = "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/instabot/accs/{}/logs"
 
-# Return last digit
-def lastdigit(int_):
-    return int(str(int_)[len(str(int_))-1])
+if not os.path.exists(dir.format(3)):
+    os.makedirs(dir.format(3))
 
-# Return number without last digit
-def removelastdigit(int_):
-    return int(int_ / 10)
-
-# Return num of script
-def scripttonum(script):
-    if script == "follow":
-        return 1
-    elif script == "unfollow":
-        return 2
-    elif script == "like":
-        return 3
-    elif script == "comment":
-        return 4
-    elif script == "direct":
-        return 5
-    else:
-        print("ERROR! scripttpnum() func cant parse {} param.".format(script))
-
-# Return script name
-def numtoscript(int_):
-    if int_ == 1:
-        return "follow"
-    elif int_ == 2:
-        return "unfollow"
-    elif int_ == 3:
-        return "like"
-    elif int_ == 4:
-        return "comment"
-    elif int_ == 5:
-        return "direct"
-    else:
-        print("ERROR! numtoscript() func cant parse '{}' param.".format(int_))
-
-print("Original: {} | Separated: {} | Last: {}.".format(a, removelastdigit(a), lastdigit(a)))
-print("Original: {} | Separated: {} | Script: {}.".format(a, removelastdigit(a), numtoscript(lastdigit(a))))
+log = open(logfile(3, "like"), 'a')

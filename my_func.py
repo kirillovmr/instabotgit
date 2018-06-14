@@ -2,6 +2,7 @@ from subprocess import Popen, PIPE, call
 from datetime import datetime
 from sys import platform # mac or linux
 import time
+import os
 
 # Array of running scripts
 running = []
@@ -75,10 +76,13 @@ log = dict()
 # Opening log file with write option
 def openlog(id, script):
     log[id] = dict() # making it 2d
-    try:
-        log[id][script] = open(logfile(id, script), 'a')
-    except:
-        log[id][script] = open(logfile(id, script), 'w')
+
+    # Creating folders
+    dir = "{}/instabot/accs/{}/logs".format(path_, id)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+
+    log[id][script] = open(logfile(id, script), 'a')
     return log[id][script]
 
 procs = dict()
