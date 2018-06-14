@@ -4,3 +4,4 @@
 *.checkpoint
 *.DS_Store
 config.py
+*accs/
