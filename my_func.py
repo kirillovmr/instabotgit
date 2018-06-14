@@ -92,6 +92,7 @@ def start(id, script):
     if procs[id][script].poll() == None:
         print("{} Bot {}-'{}' was started successfully. PID: {}".format(now_time(), id, script.upper(), procs[id][script].pid))
         running.append(id * 10 + scripttonum(script))
+        running = sorted(running)
 
 # Stopping python script
 def stop(id, script):
