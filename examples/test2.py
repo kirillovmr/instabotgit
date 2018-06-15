@@ -1,14 +1,34 @@
+"""
+    Bot - Follow user followers
+"""
 import os
+import sys
+import time
+import random
+import argparse
+from sys import platform # mac or linux
 
-path_ = "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages"
+if "darwin" in platform.lower():
+    print("Script launched on MAC OS")
+    path_ = "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/instabot"
+elif "linux" in platform.lower():
+    print("Script launched on LINUX")
+    path_ = "/usr/local/lib/python3.4/dist-packages/instabot"
+else:
+    print("This platform is not supported. Exiting...")
+    exit()
 
-# Function returns path to log file
-def logfile(id, script):
-    return "{}/instabot/accs/{}/logs/{}.log".format(path_, id, script)
+sys.path.append(os.path.join(sys.path[0], '../'))
+sys.path.append(path_)
+from instabot import Bot
+import my_database
 
-dir = "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/instabot/accs/{}/logs"
+db = my_database.db_connect()
 
-if not os.path.exists(dir.format(3)):
-    os.makedirs(dir.format(3))
+get_query = ("SELECT * FROM test")
+db['cursor'].execute(get_query)
 
-log = open(logfile(3, "like"), 'a')
+settings = db['cursor']
+
+for d in settings:
+    print(d)

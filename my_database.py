@@ -24,8 +24,12 @@ dire_a_col = 8
 repo_s_col = 9
 repo_a_col = 10
 
+# Return db dict
 def db_connect():
-    return mysql.connector.connect(**config)
+    db1 = {'cnx': 0, 'cursor': 0}
+    db1['cnx'] = mysql.connector.connect(**config)
+    db1['cursor'] = db1['cnx'].cursor(buffered=True)
+    return db1
 
 # Return dict() with settings for bot_id
 def get_settings(bot_id_):
