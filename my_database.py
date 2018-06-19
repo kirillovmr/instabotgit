@@ -62,11 +62,30 @@ def get_settings(bot_id_):
         settings['like_hashtags'] = data[17].strip()
         settings['caption'] = data[18].strip()
         settings['donors'] = data[19].strip()
-        # add comments
-        # add messages
 
     # Returning settings dictionary
     return settings
+
+# Return array with comments for bot_id
+def get_comments(bot_id_):
+    # Executing query, storing answer in 'buff'
+    get_query = ("SELECT * FROM bots_comments WHERE bot_id={}".format(bot_id_))
+    db['cursor'].execute(get_query)
+    buff = db['cursor']
+
+    # Initializing comments array
+    comments = []
+
+    # Appending not empty values
+    for data in buff:
+        i = 1
+        while i <= 10:
+            if data[i].strip() != "":
+                comments.append(data[i].strip())
+            i += 1
+
+    # Returning settings dictionary
+    return comments
 
 # Change values in Bot_status table
 def update_db(param, value, bot_id):
