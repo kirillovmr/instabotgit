@@ -40,7 +40,6 @@ comments = my_database.get_comments(args.bot_id)
 random.shuffle(comments)
 
 print("SETTINGS: comment_location: '{}', comment_delay: {}s".format(settings['comment_location'], settings['comment_delay']))
-
 comments_sent = 0
 
 # Func from examples/commenr_medias_by_location.py

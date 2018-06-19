@@ -5,7 +5,9 @@ config = {
   'user': 'belyy00_ibot',
   'password': 'Kirillov44',
   'host': 'belyy00.mysql.tools',
-  'database': 'belyy00_ibot'
+  'database': 'belyy00_ibot',
+  'charset': 'utf8mb4',
+  'collation': 'utf8mb4_general_ci'
 }
 
 db = {'cnx': 0, 'cursor': 0}
