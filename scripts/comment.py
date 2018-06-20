@@ -53,7 +53,7 @@ def comment_location_feed(new_bot, new_location, amount=0):
                 location_feed = new_bot.api.last_json
                 for media in new_bot.filter_medias(location_feed["items"][:amount], quiet=True):
                     if bot.comment(media, comments[num]):
-                        print("Commented {}".format(comments[num]))
+                        bot.logger.info("Commented {}".format(comments[num]))
                         counter += 1
                         pbar.update(1)
                 if not location_feed.get('next_max_id'):
