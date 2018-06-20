@@ -10,6 +10,7 @@ while True:
 
     # Check running scripts. If closed - trying to restart
     checkrun()
+    
     # Print running scripts
     print_running_array()
 
