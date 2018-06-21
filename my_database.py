@@ -59,11 +59,12 @@ def get_settings(bot_id_):
         settings['message_delay'] = data[12]
         settings['repost_delay'] = data[13]
         settings['check_new_followers_delay'] = data[14]
-        settings['comment_location'] = data[15].strip()
-        settings['follow_followers'] = data[16].strip()
-        settings['like_hashtags'] = data[17].strip()
-        settings['caption'] = data[18].strip()
-        settings['donors'] = data[19].strip()
+        settings['follow_limit'] = data[15]
+        settings['comment_location'] = data[16].strip()
+        settings['follow_followers'] = data[17].strip()
+        settings['like_hashtags'] = data[18].strip()
+        settings['caption'] = data[19].strip()
+        settings['donors'] = data[20].strip()
 
     # Returning settings dictionary
     return settings
