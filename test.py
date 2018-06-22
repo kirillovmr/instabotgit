@@ -11,7 +11,7 @@ db = db_connect()
 
 while True:
     # SELECT BOT_ID and FOLLOW_LIMIT only for running bots
-    get_follow_q = ("SELECT `bots`.`bot_id`,`bots`.`login`,`bots`.`password`,`bots`.`proxy`,`bots`.`follow_delay`,`bots`.`follow_limit` FROM `bots`,`bot_status` WHERE `bots`.`bot_id` = `bot_status`.`bot_id` AND `bot_status`.`follow_s` = 1")
+    get_follow_q = ("SELECT `bots`.`bot_id`,`bots`.`login`,`bots`.`password`,`bots`.`proxy`,`bots`.`follow_delay`,`bots`.`follow_limit`,`bots`.`f_u_autostart` FROM `bots`,`bot_status` WHERE `bots`.`bot_id` = `bot_status`.`bot_id` AND `bot_status`.`follow_s` = 1")
     db['cursor'].execute(get_follow_q)
     buff = db['cursor']
 
@@ -22,6 +22,7 @@ while True:
         proxy = bot_row[3]
         follow_delay = bot_row[4]
         follow_limit = bot_row[5]
+        f_u_autostart = bot_row[6]
 
         # Going to current bot folder
         os.chdir("{}/instabot/accs/{}".format(path_, id))
@@ -41,7 +42,13 @@ while True:
         zapas = int((check_delay/follow_delay) + 2) # + 2 follows for safe
 
         if following_count + zapas >= follow_limit:
-            print("Bot {} reached follow limit. Going to unfollow".format(id))
+            print("Bot {} reached follow limit.".format(id))
+            if f_u_autostart:
+                update_db("follow_s", 2, id)
+                print("Bot {} STARTED to UNFOLLOW".format(id))
+            else:
+                update_db("follow_s", 0, id)
+                print("Bot {} FOLLOWS STOPPED".format(id))
 
     print("{} Waiting {}s. before next check.".format(now_time(), check_delay))
     time.sleep(check_delay)

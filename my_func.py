@@ -116,6 +116,7 @@ def checkrun():
             print("{} Bot {}-'{}' was closed. Trying to restart...".format(now_time(), id, script.upper()))
             start(id, script)
 
+# 
 # Print working scripts
 def print_running():
     print("{} NOW RUNNING:".format(now_time()))

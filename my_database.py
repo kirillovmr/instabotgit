@@ -88,8 +88,29 @@ def get_comments(bot_id_):
                 comments.append(data[i].strip())
             i += 1
 
-    # Returning settings dictionary
+    # Returning comments array
     return comments
+
+# Return array with messages for bot_id
+def get_messages(bot_id_):
+    # Executing query, storing answer in 'buff'
+    get_query = ("SELECT * FROM bots_messages WHERE bot_id={}".format(bot_id_))
+    db['cursor'].execute(get_query)
+    buff = db['cursor']
+
+    # Initializing messages array
+    messages = []
+
+    # Appending not empty values
+    for data in buff:
+        i = 1
+        while i <= 10:
+            if data[i].strip() != "":
+                messages.append(data[i].strip())
+            i += 1
+
+    # Returning messages array
+    return messages
 
 # Change values in Bot_status table
 def update_db(param, value, bot_id):
@@ -138,6 +159,14 @@ def get_bots_status():
             elif data[comm_s_col] == 0 and data[comm_a_col] == 1:
                 stop(data[bot_id_col], "comment")
                 update_db("comment_a", 0, data[bot_id_col])
+        # DIRECT
+        if data[dire_s_col] != data[dire_a_col]:
+            if data[dire_s_col] == 1 and data[dire_a_col] == 0:
+                start(data[bot_id_col], "direct")
+                update_db("direct_a", 1, data[bot_id_col])
+            elif data[dire_s_col] == 0 and data[dire_a_col] == 1:
+                stop(data[bot_id_col], "direct")
+                update_db("direct_a", 0, data[bot_id_col])
         # FOLLOW
         if data[foll_s_col] != data[foll_a_col]:
             if data[foll_s_col] == 1 and data[foll_a_col] == 0:

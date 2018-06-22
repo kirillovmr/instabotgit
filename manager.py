@@ -1,17 +1,20 @@
-from my_database import *
+import my_database
 from my_func import *
 
 # Set all actual values to 0 in database.
-set_actual_zero()
+my_database.set_actual_zero()
 
 while True:
+    # Check if need to stop follow / unfollow
+    
+
     # Get statuses from database and start/stop bots
-    get_bots_status()
+    my_database.get_bots_status()
 
     # Check running scripts. If closed - trying to restart
-    checkrun()
-    
+    my_func.checkrun()
+
     # Print running scripts
-    print_running_array()
+    my_func.print_running_array()
 
     time.sleep(30)
