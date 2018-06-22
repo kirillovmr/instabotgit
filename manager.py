@@ -1,5 +1,6 @@
 import my_database
 import my_func
+import time
 
 # Set all actual values to 0 in database.
 my_database.set_actual_zero()
