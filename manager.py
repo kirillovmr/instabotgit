@@ -1,12 +1,12 @@
 import my_database
-from my_func import *
+import my_func
 
 # Set all actual values to 0 in database.
 my_database.set_actual_zero()
 
 while True:
     # Check if need to stop follow / unfollow
-    
+
 
     # Get statuses from database and start/stop bots
     my_database.get_bots_status()
