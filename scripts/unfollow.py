@@ -33,6 +33,11 @@ settings = my_database.get_settings(args.bot_id)
 
 print("SETTINGS: unfollow_delay: {}, per_day: {}".format(settings['unfollow_delay'], settings['max_unfollows_per_day']))
 
+# Creating folders
+dir = "{}/accs/{}/logs".format(path_, args.bot_id)
+if not os.path.exists(dir):
+    os.makedirs(dir)
+    
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 

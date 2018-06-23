@@ -179,6 +179,11 @@ delay_between_posts = settings["repost_delay"]
 
 print("SETTINGS: delay_between_posts: {} min.".format(settings['repost_delay']))
 
+# Creating folders
+dir = "{}/accs/{}/logs".format(path_, args.bot_id)
+if not os.path.exists(dir):
+    os.makedirs(dir)
+    
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 

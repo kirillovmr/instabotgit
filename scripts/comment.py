@@ -61,6 +61,11 @@ def comment_location_feed(new_bot, new_location, amount=0):
                 max_id = location_feed['next_max_id']
     return True
 
+# Creating folders
+dir = "{}/accs/{}/logs".format(path_, args.bot_id)
+if not os.path.exists(dir):
+    os.makedirs(dir)
+    
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 

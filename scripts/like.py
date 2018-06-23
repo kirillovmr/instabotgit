@@ -45,6 +45,11 @@ random.shuffle(hashtags)
 
 print("SETTINGS: max_likes: {}, delay: {}".format(settings['max_likes_per_day'], settings['like_delay']))
 
+# Creating folders
+dir = "{}/accs/{}/logs".format(path_, args.bot_id)
+if not os.path.exists(dir):
+    os.makedirs(dir)
+
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 

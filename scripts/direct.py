@@ -44,6 +44,11 @@ NOTIFIED_USERS_PATH = 'notified_users.txt'
 print("SETTINGS: message_delay: {}s, check_new_followers_delay: {}s".format(settings['message_delay'], settings['check_new_followers_delay']))
 messages_sent = 0
 
+# Creating folders
+dir = "{}/accs/{}/logs".format(path_, args.bot_id)
+if not os.path.exists(dir):
+    os.makedirs(dir)
+
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 
