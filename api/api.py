@@ -12,14 +12,19 @@ import requests.utils
 import six.moves.urllib as urllib
 from tqdm import tqdm
 
-from . import config
+from . import config, devices
 from .api_photo import configure_photo, download_photo, upload_photo
 from .api_video import configure_video, download_video, upload_video
 from .prepare import delete_credentials, get_credentials
 
 
 class API(object):
-    def __init__(self):
+    def __init__(self, device=None):
+        # Setup device and user_agent
+        device = device or devices.DEFAULT_DEVICE
+        self.device_settings = devices.DEVICES[device]
+        self.user_agent = config.USER_AGENT_BASE.format(**self.device_settings)
+
         self.is_logged_in = False
         self.last_response = None
         self.total_requests = 0
@@ -65,8 +70,9 @@ class API(object):
                 self.set_proxy()  # Only happens if `self.proxy`
                 self.logger.info("Logged-in successfully as '{}' using the cookie!".format(self.username))
                 return True
-            except Exception as e:
-                print(str(e))
+            except Exception:
+                print("The cookie is not found, but don't worry `instabot`"
+                      " will create it for you using your login details.")
 
         if not cookie_is_loaded and (not self.is_logged_in or force):
             self.session = requests.Session()
@@ -143,14 +149,8 @@ class API(object):
             self.logger.critical(msg)
             raise Exception(msg)
 
-        self.session.headers.update({
-            'Connection': 'close',
-            'Accept': '*/*',
-            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'Cookie2': '$Version=1',
-            'Accept-Language': 'en-US',
-            'User-Agent': config.USER_AGENT
-        })
+        self.session.headers.update(config.REQUEST_HEADERS)
+        self.session.headers.update({'User-Agent': self.user_agent})
         try:
             self.total_requests += 1
             if post is not None:  # POST
@@ -344,6 +344,10 @@ class API(object):
         url = 'feed/tag/{tag}/?rank_token={rank_token}&ranked_content=true&'
         return self.send_request(url.format(tag=tag, rank_token=self.rank_token))
 
+    def get_comment_likers(self, comment_id):
+        url = 'media/{comment_id}/comment_likers/?'.format(comment_id=comment_id)
+        return self.send_request(url)
+
     def get_media_likers(self, media_id):
         url = 'media/{media_id}/likers/?'.format(media_id=media_id)
         return self.send_request(url)
@@ -424,6 +428,16 @@ class API(object):
 
     def get_self_user_followers(self):
         return self.followers
+
+    def like_comment(self, comment_id):
+        data = self.json_data()
+        url = 'media/{comment_id}/comment_like/'.format(comment_id=comment_id)
+        return self.send_request(url, data)
+
+    def unlike_comment(self, comment_id):
+        data = self.json_data()
+        url = 'media/{comment_id}/comment_unlike/'.format(comment_id=comment_id)
+        return self.send_request(url, data)
 
     def like(self, media_id):
         data = self.json_data({'media_id': media_id})
@@ -589,7 +603,7 @@ class API(object):
                 if last_json["big_list"] is False:
                     return result[:total]
 
-                next_max_id = last_json["next_max_id"]
+                next_max_id = last_json.get("next_max_id", "")
 
     def get_total_followers(self, user_id, amount=None):
         return self.get_total_followers_or_followings(
@@ -600,9 +614,15 @@ class API(object):
             user_id, amount, 'followings')
 
     def get_total_user_feed(self, user_id, min_timestamp=None):
+        return self.get_last_user_feed(user_id, amount=float('inf'), min_timestamp=min_timestamp)
+
+    def get_last_user_feed(self, user_id, amount, min_timestamp=None):
         user_feed = []
         next_max_id = ''
         while True:
+            if len(user_feed) >= float(amount):
+                # one request returns max 13 items
+                return user_feed[:amount]
             self.get_user_feed(user_id, next_max_id, min_timestamp)
             last_json = self.last_json
             if "items" not in last_json:
@@ -611,7 +631,7 @@ class API(object):
             user_feed += last_json["items"]
             if not last_json.get("more_available"):
                 return user_feed
-            next_max_id = last_json["next_max_id"]
+            next_max_id = last_json.get("next_max_id", "")
 
     def get_total_hashtag_feed(self, hashtag_str, amount=100):
         hashtag_feed = []
@@ -620,8 +640,13 @@ class API(object):
         with tqdm(total=amount, desc="Getting hashtag media.", leave=False) as pbar:
             while True:
                 self.get_hashtag_feed(hashtag_str, next_max_id)
+
+                if not self.last_json.get('items'):
+                    return hashtag_feed[:amount]
+
                 last_json = self.last_json
                 items = last_json['items']
+
                 try:
                     pbar.update(len(items))
                     hashtag_feed += items
@@ -629,7 +654,7 @@ class API(object):
                         return hashtag_feed[:amount]
                 except Exception:
                     return hashtag_feed[:amount]
-                next_max_id = last_json["next_max_id"]
+                next_max_id = last_json.get("next_max_id", "")
 
     def get_total_self_user_feed(self, min_timestamp=None):
         return self.get_total_user_feed(self.user_id, min_timestamp)
@@ -646,7 +671,7 @@ class API(object):
         for _ in range(scan_rate):
             self.get_liked_media(next_id)
             last_json = self.last_json
-            next_id = last_json["next_max_id"]
+            next_id = last_json.get("next_max_id", "")
             liked_items += last_json["items"]
         return liked_items
 

@@ -58,7 +58,7 @@ def _get_media_ids(media_items):
 
 
 def check_media(self, media_id):
-    self.media_info(media_id)
+    self.api.media_info(media_id)
     if self.filter_medias(self.api.last_json["items"]):
         return check_user(self, self.get_media_owner(media_id))
     return False
@@ -126,7 +126,12 @@ def check_user(self, user_id, filter_closed_acc=False, unfollowing=False):
     ))
 
     skipped = self.skipped_file
+    followed = self.followed_file
 
+    if not unfollowing:
+        if self.filter_previously_followed and user_id in followed.list:
+            self.console_print('info: account previously followed, skipping!', 'red')
+            return False
     if filter_closed_acc and "is_private" in user_info:
         if user_info["is_private"]:
             self.console_print('info: account is PRIVATE, skipping! ', 'red')
