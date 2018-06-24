@@ -53,7 +53,7 @@ if not os.path.exists(dir):
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 
-bot = Bot(max_likes_per_day=settings['max_likes_per_day'], like_delay=settings['like_delay'])
+bot = Bot(script='like', max_likes_per_day=settings['max_likes_per_day'], like_delay=settings['like_delay'])
 bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 

@@ -183,11 +183,11 @@ print("SETTINGS: delay_between_posts: {} min.".format(settings['repost_delay']))
 dir = "{}/accs/{}/logs".format(path_, args.bot_id)
 if not os.path.exists(dir):
     os.makedirs(dir)
-    
+
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 
-bot = Bot()
+bot = Bot(script='repost')
 bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 

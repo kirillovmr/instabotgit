@@ -37,11 +37,11 @@ print("SETTINGS: unfollow_delay: {}, per_day: {}".format(settings['unfollow_dela
 dir = "{}/accs/{}/logs".format(path_, args.bot_id)
 if not os.path.exists(dir):
     os.makedirs(dir)
-    
+
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 
-bot = Bot(max_unfollows_per_day=settings['max_unfollows_per_day'], unfollow_delay=settings['unfollow_delay'])
+bot = Bot(script='unfollow', max_unfollows_per_day=settings['max_unfollows_per_day'], unfollow_delay=settings['unfollow_delay'])
 bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 

@@ -65,11 +65,11 @@ def comment_location_feed(new_bot, new_location, amount=0):
 dir = "{}/accs/{}/logs".format(path_, args.bot_id)
 if not os.path.exists(dir):
     os.makedirs(dir)
-    
+
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 
-bot = Bot(comment_delay=settings['comment_delay'])
+bot = Bot(script='comment', comment_delay=settings['comment_delay'])
 bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 

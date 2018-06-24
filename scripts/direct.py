@@ -52,7 +52,7 @@ if not os.path.exists(dir):
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 
-bot = Bot()
+bot = Bot(script='direct')
 bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 
