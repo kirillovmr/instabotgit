@@ -19,7 +19,7 @@ from .prepare import delete_credentials, get_credentials
 
 
 class API(object):
-    def __init__(self, device=None):
+    def __init__(self, device=None, script=None):
         # Setup device and user_agent
         device = device or devices.DEFAULT_DEVICE
         self.device_settings = devices.DEVICES[device]
@@ -32,7 +32,10 @@ class API(object):
         # Setup logging
         self.logger = logging.getLogger('[instabot_{}]'.format(id(self)))
 
-        fh = logging.FileHandler(filename='instabot.log')
+        if script:
+            fh = logging.FileHandler(filename='log-{}.log'.format(script))
+        else:
+            fh = logging.FileHandler(filename='instabot.log')
         fh.setLevel(logging.INFO)
         fh.setFormatter(logging.Formatter('%(asctime)s %(message)s'))
 

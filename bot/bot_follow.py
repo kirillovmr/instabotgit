@@ -13,6 +13,7 @@ def follow(self, user_id):
         self.delay('follow')
         if self.api.follow(user_id):
             msg = '===> FOLLOWED <==== `user_id`: {}.'.format(user_id)
+            self.logger.info(msg)
             self.console_print(msg, 'green')
             self.total['follows'] += 1
             self.followed_file.append(user_id)

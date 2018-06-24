@@ -47,6 +47,7 @@ from .bot_video import upload_video
 
 class Bot(object):
     def __init__(self,
+                 script=None,
                  whitelist_file='whitelist.txt',
                  blacklist_file='blacklist.txt',
                  comments_file='comments.txt',
@@ -88,7 +89,7 @@ class Bot(object):
                  verbosity=True,
                  device=None
                  ):
-        self.api = API(device=device)
+        self.api = API(device=device, script=script)
 
         self.total = {'likes': 0,
                       'unlikes': 0,

@@ -63,7 +63,7 @@ if not os.path.exists(dir):
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 
-bot = Bot(max_follows_per_day=settings['max_follows_per_day'],
+bot = Bot(script='follow_l', max_follows_per_day=settings['max_follows_per_day'],
         follow_delay=settings['follow_delay'], max_following_to_followers_ratio=4,
         max_followers_to_following_ratio=20, filter_business_accounts=False,
         max_followers_to_follow=5000, max_following_to_follow=7500)
