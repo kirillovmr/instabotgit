@@ -144,6 +144,8 @@ def get_bots_status():
             elif data[like_s_col] == 0 and data[like_a_col] == 1:
                 stop(data[bot_id_col], "like")
                 update_db("like_a", 0, data[bot_id_col])
+            elif data[like_s_col] == 9 and data[like_a_col] == 1:
+                restart(data[bot_id_col], "like")
         # REPOST
         if data[repo_s_col] != data[repo_a_col]:
             if data[repo_s_col] == 1 and data[repo_a_col] == 0:
@@ -152,6 +154,8 @@ def get_bots_status():
             elif data[repo_s_col] == 0 and data[repo_a_col] == 1:
                 stop(data[bot_id_col], "repost")
                 update_db("repost_a", 0, data[bot_id_col])
+            elif data[repo_s_col] == 9 and data[repo_a_col] == 1:
+                restart(data[bot_id_col], "repost")
         # COMMENT
         if data[comm_s_col] != data[comm_a_col]:
             if data[comm_s_col] == 1 and data[comm_a_col] == 0:
@@ -160,6 +164,8 @@ def get_bots_status():
             elif data[comm_s_col] == 0 and data[comm_a_col] == 1:
                 stop(data[bot_id_col], "comment")
                 update_db("comment_a", 0, data[bot_id_col])
+            elif data[comm_s_col] == 9 and data[comm_a_col] == 1:
+                restart(data[bot_id_col], "comment")
         # DIRECT
         if data[dire_s_col] != data[dire_a_col]:
             if data[dire_s_col] == 1 and data[dire_a_col] == 0:
@@ -168,6 +174,8 @@ def get_bots_status():
             elif data[dire_s_col] == 0 and data[dire_a_col] == 1:
                 stop(data[bot_id_col], "direct")
                 update_db("direct_a", 0, data[bot_id_col])
+            elif data[dire_s_col] == 9 and data[dire_a_col] == 1:
+                restart(data[bot_id_col], "direct")
         # FOLLOW
         if data[foll_s_col] != data[foll_a_col]:
             if data[foll_s_col] == 1 and data[foll_a_col] == 0:
@@ -192,3 +200,7 @@ def get_bots_status():
                 time.sleep(5)
                 start(data[bot_id_col], "follow")
                 update_db("follow_a", 1, data[bot_id_col])
+            elif data[foll_s_col] == 9 and data[foll_a_col] == 1:
+                restart(data[bot_id_col], "follow")
+            elif data[foll_s_col] == 9 and data[foll_a_col] == 2:
+                restart(data[bot_id_col], "unfollow")

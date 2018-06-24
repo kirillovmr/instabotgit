@@ -101,10 +101,18 @@ def start(id, script):
         running.append(id * 10 + scripttonum(script))
 
 # Stopping python script
-def stop(id, script):
+def stop(id, script, r=False):
     procs[id][script].kill()
-    print("{} Bot {}-'{}' was stopped by request.".format(now_time(), id, script.upper()))
+    if not r:
+        print("{} Bot {}-'{}' was stopped by request.".format(now_time(), id, script.upper()))
     running.remove(id * 10 + scripttonum(script))
+
+# Restarting scripts
+def restart(id, script):
+    print("{} Bot {}-'{}' going to restart by request.".format(now_time(), id, script.upper()))
+    stop(id, script, r=True)
+    time.sleep(5)
+    start(id, script)
 
 # Check are scripts still running. If no - restarts
 def checkrun():
@@ -116,7 +124,7 @@ def checkrun():
             print("{} Bot {}-'{}' was closed. Trying to restart...".format(now_time(), id, script.upper()))
             start(id, script)
 
-# 
+#
 # Print working scripts
 def print_running():
     print("{} NOW RUNNING:".format(now_time()))
