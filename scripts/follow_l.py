@@ -77,7 +77,7 @@ while True:
         finded_location = bot.api.last_json['items'][0]
         if finded_location:
             print(u"Found {}".format(finded_location['title']))
-            follow_location_feed(bot, finded_location, amount=int(1))
+            follow_location_feed(bot, finded_location, amount=int(18))
             time.sleep(settings['follow_delay'])
         else:
             bot.logger.info("FOLLOW_LOCATION | Location '{}' was not found.".format(location))
