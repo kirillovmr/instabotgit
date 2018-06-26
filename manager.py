@@ -5,6 +5,8 @@ import time
 # Set all actual values to 0 in database.
 my_database.set_actual_zero()
 
+my_database.get_bots_status()
+
 while True:
     # Check if need to stop follow / unfollow
 
