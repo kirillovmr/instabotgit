@@ -33,6 +33,18 @@ def db_connect():
     db1['cursor'] = db1['cnx'].cursor(buffered=True)
     return db1
 
+# Return array with chat_ids for appropriate bot_id
+def get_chat_ids_tg(bot_id):
+    get_query = "SELECT ac.* FROM tgacc_chatid ac, tgacc_bot ab WHERE ac.tgacc_id = ab.tgacc_id AND ab.bot_id = {}".format(bot_id)
+    db['cursor'].execute(get_query)
+    buff = db['cursor']
+
+    chat_ids = []
+    for data in buff:
+        chat_ids.append(data[1])
+
+    return chat_ids
+
 # Return dict() with settings for bot_id
 def get_settings(bot_id_):
     # Executing query, storing answer in 'buff'

@@ -1,6 +1,8 @@
 from subprocess import Popen, PIPE, call
 from datetime import datetime
 from sys import platform # mac or linux
+import my_telegram
+import my_database
 import time
 import os
 
@@ -98,6 +100,7 @@ def start(id, script):
     # procs[id][script] = call(script_path(script, id), shell=True)
     if procs[id][script].poll() == None:
         print("{} Bot {}-'{}' was started successfully. PID: {}".format(now_time(), id, script.upper(), procs[id][script].pid))
+        my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "Bot {}-'{}' was started successfully.".format(id, script.upper()))
         running.append(id * 10 + scripttonum(script))
 
 # Stopping python script
@@ -105,11 +108,13 @@ def stop(id, script, r=False):
     procs[id][script].kill()
     if not r:
         print("{} Bot {}-'{}' was stopped by request.".format(now_time(), id, script.upper()))
+        my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "Bot {}-'{}' was stopped by request.".format(id, script.upper()))
     running.remove(id * 10 + scripttonum(script))
 
 # Restarting scripts
 def restart(id, script):
     print("{} Bot {}-'{}' going to restart by request.".format(now_time(), id, script.upper()))
+    my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "Bot {}-'{}' going to restart by request.".format(id, script.upper()))
     stop(id, script, r=True)
     time.sleep(5)
     start(id, script)
@@ -122,6 +127,7 @@ def checkrun():
         if procs[id][script].poll() != None:
             running.remove(num)
             print("{} Bot {}-'{}' was closed. Trying to restart...".format(now_time(), id, script.upper()))
+            my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "Bot {}-'{}' was closed. Trying to restart...".format(id, script.upper()))
             start(id, script)
 
 #
