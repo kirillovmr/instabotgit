@@ -134,10 +134,15 @@ def checkrun():
                 print(text)
                 start(id, script, tg_notify=False)
             elif poll == 11:
-                text = "{} Bot {}-'{}' unfollowed everyone. Bot stopped.".format(now_time(), id, script.upper())
-                print(text)
+                text = "Bot {}-'{}' unfollowed everyone. Bot stopped.".format(id, script.upper())
+                print(now_time() + " " + text)
                 my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), text)
                 my_database.update_db("follow_s", 0, id)
+            elif poll == 12:
+                text = "Bot {}-'{}' returned 'feedback_required'. Bot stopped.".format(id, script.upper())
+                print(now_time() + " " + text)
+                my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), text)
+                my_database.update_db("{}_s".format(script.lower()), 0, id)
             else:
                 text = "{} Bot {}-'{}' was closed. Trying to restart...".format(now_time(), id, script.upper())
                 print(text)
