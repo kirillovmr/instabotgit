@@ -89,7 +89,7 @@ os.chdir("{}/accs/{}".format(path_, args.bot_id))
 bot = Bot(script='follow', max_follows_per_day=settings['max_follows_per_day'],
         follow_delay=settings['follow_delay'], max_following_to_followers_ratio=4,
         max_followers_to_following_ratio=20, filter_business_accounts=False,
-        max_followers_to_follow=5000, max_following_to_follow=7500)
+        max_followers_to_follow=5000, max_following_to_follow=7500, stop_words='')
 bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 
@@ -106,6 +106,7 @@ if settings['follow_type'] == 1:
                 time.sleep(settings['follow_delay'])
             else:
                 bot.logger.info("FOLLOW_LOCATION | Location '{}' was not found.".format(location))
+        exit(10)
 
 elif settings['follow_type'] == 2:
     bot.logger.info("=== SCRIPT 'FOLLOW BY HASHTAGS' ===")

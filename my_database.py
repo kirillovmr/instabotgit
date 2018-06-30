@@ -1,3 +1,4 @@
+from sys import platform # mac or linux
 import mysql.connector
 from my_func import *
 
@@ -9,6 +10,11 @@ config = {
   'charset': 'utf8mb4',
   'collation': 'utf8mb4_general_ci'
 }
+
+if "darwin" in platform.lower():
+    table_status = "bot_status_test"
+elif "linux" in platform.lower():
+    table_status = "bot_status"
 
 db = {'cnx': 0, 'cursor': 0}
 db['cnx'] = mysql.connector.connect(**config)
@@ -92,7 +98,6 @@ def get_comments(bot_id_):
 
     # Initializing comments array
     comments = []
-
     # Appending not empty values
     for data in buff:
         i = 1
@@ -113,7 +118,6 @@ def get_messages(bot_id_):
 
     # Initializing messages array
     messages = []
-
     # Appending not empty values
     for data in buff:
         i = 1
@@ -127,14 +131,14 @@ def get_messages(bot_id_):
 
 # Change values in Bot_status table
 def update_db(param, value, bot_id):
-    q = ("UPDATE bot_status SET {}={} WHERE bot_id={}".format(param, value, bot_id))
+    q = ("UPDATE {} SET {}={} WHERE bot_id={}".format(table_status, param, value, bot_id))
     db['cursor'].execute(q)
     db['cnx'].commit()
     print("{} BOT ID {} | Updated {} with value {}".format(now_time(), bot_id, param, value))
 
 # Set all actual values to 0 in database. Use it after manager restart
 def set_actual_zero():
-    q = ("UPDATE bot_status SET follow_a=0, like_a=0, comment_a=0, direct_a=0, repost_a=0")
+    q = ("UPDATE {} SET follow_a=0, like_a=0, comment_a=0, direct_a=0, repost_a=0".format(table_status))
     db['cursor'].execute(q)
     db['cnx'].commit()
     print("{} All actual values were updated to 0.".format(now_time()))
@@ -142,7 +146,7 @@ def set_actual_zero():
 # Get statuses from database and start/stop bots
 def get_bots_status():
     # Executing query
-    get_query = ("SELECT * FROM bot_status")
+    get_query = ("SELECT * FROM {}".format(table_status))
     db['cursor'].execute(get_query)
 
     # Going through status and start/stop appropriate bots

@@ -46,3 +46,4 @@ bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 
 bot.unfollow_everyone()
+exit(11)

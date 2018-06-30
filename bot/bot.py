@@ -85,7 +85,7 @@ class Bot(object):
                  block_delay=30,
                  unblock_delay=30,
                  message_delay=60,
-                 stop_words=('shop', 'store', 'free'),
+                 stop_words=('shqfqfqfop', 'stqefqfsafaore'),
                  verbosity=True,
                  device=None
                  ):

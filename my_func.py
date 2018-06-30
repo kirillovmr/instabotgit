@@ -89,7 +89,7 @@ def openlog(id, script):
 
 procs = dict()
 # Starting python script
-def start(id, script):
+def start(id, script, tg_notify=True):
     # Making array 2d only once
     try:
         type(procs[id])
@@ -100,7 +100,8 @@ def start(id, script):
     # procs[id][script] = call(script_path(script, id), shell=True)
     if procs[id][script].poll() == None:
         print("{} Bot {}-'{}' was started successfully. PID: {}".format(now_time(), id, script.upper(), procs[id][script].pid))
-        my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "Bot {}-'{}' was started successfully.".format(id, script.upper()))
+        if tg_notify:
+            my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "Bot {}-'{}' was started successfully.".format(id, script.upper()))
         running.append(id * 10 + scripttonum(script))
 
 # Stopping python script
@@ -124,11 +125,23 @@ def checkrun():
     for num in running:
         id = removelastdigit(num)
         script = numtoscript(lastdigit(num))
-        if procs[id][script].poll() != None:
+        poll = procs[id][script].poll()
+        if poll != None:
             running.remove(num)
-            print("{} Bot {}-'{}' was closed. Trying to restart...".format(now_time(), id, script.upper()))
-            my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "Bot {}-'{}' was closed. Trying to restart...".format(id, script.upper()))
-            start(id, script)
+            if poll == 10:
+                text = "{} Bot {}-'{}' finished cycle. Restarting.".format(now_time(), id, script.upper())
+                print(text)
+                start(id, script, tg_notify=False)
+            elif poll == 11:
+                text = "{} Bot {}-'{}' unfollowed everyone. Bot stopped.".format(now_time(), id, script.upper())
+                print(text)
+                my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), text)
+                my_database.update_db("follow_s", 0, id)
+            else:
+                text = "{} Bot {}-'{}' was closed. Trying to restart...".format(now_time(), id, script.upper())
+                print(text)
+                my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), text)
+                start(id, script)
 
 #
 # Print working scripts

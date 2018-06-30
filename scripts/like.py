@@ -62,4 +62,5 @@ wait = 5 * 60  # in seconds | Waiting between each hashtag
 while True:
     for hashtag in hashtags:
         bot.like_hashtag(hashtag)
-    time.sleep(wait)
+        time.sleep(wait)
+        exit(10)
