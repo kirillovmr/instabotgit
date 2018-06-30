@@ -152,6 +152,7 @@ def get_bots_status():
     # Going through status and start/stop appropriate bots
     settings = db['cursor']
     for data in settings:
+        # Array with bots, will be sent msg to tg with this bots
         # LIKES
         if data[like_s_col] != data[like_a_col]:
             if data[like_s_col] == 1 and data[like_a_col] == 0:

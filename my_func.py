@@ -105,20 +105,21 @@ def start(id, script, tg_notify=True):
         running.append(id * 10 + scripttonum(script))
 
 # Stopping python script
-def stop(id, script, r=False):
+def stop(id, script, r=False, tg_notify=True):
     procs[id][script].kill()
     if not r:
         print("{} Bot {}-'{}' was stopped by request.".format(now_time(), id, script.upper()))
-        my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "Bot {}-'{}' was stopped by request.".format(id, script.upper()))
+        if tg_notify:
+            my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "Bot {}-'{}' was stopped by request.".format(id, script.upper()))
     running.remove(id * 10 + scripttonum(script))
 
 # Restarting scripts
-def restart(id, script):
+def restart(id, script, tg_notify=True):
     print("{} Bot {}-'{}' going to restart by request.".format(now_time(), id, script.upper()))
     my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "Bot {}-'{}' going to restart by request.".format(id, script.upper()))
-    stop(id, script, r=True)
+    stop(id, script, r=True, tg_notify)
     time.sleep(5)
-    start(id, script)
+    start(id, script, tg_notify)
 
 # Check are scripts still running. If no - restarts
 def checkrun():
