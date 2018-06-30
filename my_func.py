@@ -117,9 +117,9 @@ def stop(id, script, r=False, tg_notify=True):
 def restart(id, script, tg_notify=True):
     print("{} Bot {}-'{}' going to restart by request.".format(now_time(), id, script.upper()))
     my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "Bot {}-'{}' going to restart by request.".format(id, script.upper()))
-    stop(id, script, r=True, tg_notify)
+    stop(id, script, r=True, tg_notify=tg_notify)
     time.sleep(5)
-    start(id, script, tg_notify)
+    start(id, script, tg_notify=tg_notify)
 
 # Check are scripts still running. If no - restarts
 def checkrun():
