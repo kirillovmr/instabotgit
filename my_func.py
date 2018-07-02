@@ -138,11 +138,14 @@ def checkrun():
                 print(now_time() + " " + text)
                 my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), text)
                 my_database.update_db("follow_s", 0, id)
+                running.remove(id * 10 + scripttonum(script))
             elif poll == 12:
-                text = "Bot {}-'{}' returned 'feedback_required'. Bot stopped.".format(id, script.upper())
+                text = "Bot {}-'{}' returned 'feedback_required'. Restarting.".format(id, script.upper())
                 print(now_time() + " " + text)
                 my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), text)
-                my_database.update_db("{}_s".format(script.lower()), 0, id)
+                start(id, script, tg_notify=False)
+                # my_database.update_db("{}_s".format(script.lower()), 0, id)
+                # running.remove(id * 10 + scripttonum(script))
             else:
                 text = "{} Bot {}-'{}' was closed. Trying to restart...".format(now_time(), id, script.upper())
                 print(text)
