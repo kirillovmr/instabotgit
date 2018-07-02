@@ -39,6 +39,16 @@ def db_connect():
     db1['cursor'] = db1['cnx'].cursor(buffered=True)
     return db1
 
+def get_username_from_id(id):
+    get_query = "SELECT login FROM bots WHERE bot_id = {}".format(id)
+    db['cursor'].execute(get_query)
+    buff = db['cursor']
+
+    for data in buff:
+        username = data[0]
+
+    return username
+
 # Return array with chat_ids for appropriate bot_id
 def get_chat_ids_tg(bot_id):
     get_query = "SELECT ac.* FROM tgacc_chatid ac, tgacc_bot ab WHERE ac.tgacc_id = ab.tgacc_id AND ab.bot_id = {}".format(bot_id)

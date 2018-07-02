@@ -1,6 +1,3 @@
-import sys
-a = 0
-while a < 5:
-  print(a)
-  a += 1
-exit(44)
+import my_database
+
+print(my_database.get_username_from_id(3))

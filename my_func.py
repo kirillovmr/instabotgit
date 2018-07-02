@@ -4,10 +4,13 @@ from sys import platform # mac or linux
 import my_telegram
 import my_database
 import time
+import json
 import os
 
 # Array of running scripts
 running = []
+
+feedback_required = {}
 
 def now_time():
     return "{}:{}:{}".format(datetime.now().hour, datetime.now().minute, datetime.now().second)
@@ -140,9 +143,27 @@ def checkrun():
                 my_database.update_db("follow_s", 0, id)
                 running.remove(id * 10 + scripttonum(script))
             elif poll == 12:
+                try:
+                    feedback_required[id]['count'] += 1
+                    feedback_required[id]['last_time'] = time.time()
+                    feedback_error_count = feedback_required[id]['count']
+                    if feedback_error_count == 2 or feedback_error_count % 10 == 0:
+                        msg = "Bot {}-'{}' returned 'feedback_required' {} times.".format(id, script.upper(), feedback_error_count)
+                        # Telegram inline keyboard
+                        username = my_database.get_username_from_id(id)
+
+                        inline_button1 = { "text": 'Stop {s} bot'.format(s=script), "callback_data": '/stop {} {}'.format(username, script) }
+                        inline_keyboard = [[inline_button1]]
+                        keyboard = { "inline_keyboard": inline_keyboard }
+                        markup = json.JSONEncoder().encode(keyboard)
+
+                        my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), msg, replyMarkup=markup)
+                except KeyError:
+                    feedback_required[id] = {}
+                    feedback_required[id]['count'] = 1
+                    feedback_required[id]['last_time'] = time.time()
                 text = "Bot {}-'{}' returned 'feedback_required'. Restarting.".format(id, script.upper())
                 print(now_time() + " " + text)
-                my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), text)
                 start(id, script, tg_notify=False)
                 # my_database.update_db("{}_s".format(script.lower()), 0, id)
                 # running.remove(id * 10 + scripttonum(script))
@@ -152,7 +173,17 @@ def checkrun():
                 my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), text)
                 start(id, script)
 
-#
+# Clears a feedback_required array if needed. Used to
+def clear_feedback_required():
+    for acc in list(feedback_required):
+        last_error_time = feedback_required[acc]['last_time']
+        now_time = time.time()
+        diff = now_time - last_error_time
+        if diff > 4:
+            feedback_required.pop(acc)
+    print(feedback_required)
+
+
 # Print working scripts
 def print_running():
     print("{} NOW RUNNING:".format(now_time()))
