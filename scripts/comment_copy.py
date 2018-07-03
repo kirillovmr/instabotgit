@@ -44,7 +44,6 @@ comments_sent = 0
 
 # Func from examples/commenr_medias_by_location.py
 def comment_location_feed(new_bot, new_location, amount=0):
-    srez = random.randint(0, 4)
     num = comments_sent % len(comments)
     counter = 0
     max_id = ''
@@ -52,7 +51,7 @@ def comment_location_feed(new_bot, new_location, amount=0):
         while counter < amount:
             if new_bot.api.get_location_feed(new_location['location']['pk'], max_id=max_id):
                 location_feed = new_bot.api.last_json
-                for media in new_bot.filter_medias(location_feed["items"][srez:srez+amount], quiet=True):
+                for media in new_bot.filter_medias(location_feed["items"][:amount], quiet=True):
                     if bot.comment(media, comments[num]):
                         bot.logger.info("Commented {}".format(comments[num]))
                         counter += 1
@@ -90,6 +89,6 @@ while True:
             comments_sent += 1
             print('{now} WAITING {wait}s. | {comments_sent} comments posted. | Working {working}.'.format(
                 now=now_time(), wait=settings['comment_delay'], comments_sent=comments_sent, working=datetime.datetime.now() - start_time))
-            time.sleep(settings['comment_delay'] + random.randint(-30, 30))
+            time.sleep(settings['comment_delay'])
     except ValueError:
         print(u"\n Not valid choice. Try again")
