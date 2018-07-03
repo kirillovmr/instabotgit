@@ -46,8 +46,28 @@ def get_username_from_id(id):
 
     for data in buff:
         username = data[0]
-
     return username
+
+def fill_not_notify_array():
+    get_query = "SELECT bot_id, follow_s, like_s, comment_s, direct_s, repost_s FROM {}".format(table_status)
+    db['cursor'].execute(get_query)
+    array = []
+    settings = db['cursor']
+    for data in settings:
+        id = data[0]
+        if data[1] == 1:
+            array.append(id * 10 + 1)
+        elif data[1] == 2:
+            array.append(id * 10 + 2)
+        if data[2] == 1:
+            array.append(id * 10 + 3)
+        if data[3] == 1:
+            array.append(id * 10 + 4)
+        if data[4] == 1:
+            array.append(id * 10 + 5)
+        if data[5] == 1:
+            array.append(id * 10 + 6)
+    return array
 
 # Return array with chat_ids for appropriate bot_id
 def get_chat_ids_tg(bot_id):
@@ -58,7 +78,16 @@ def get_chat_ids_tg(bot_id):
     chat_ids = []
     for data in buff:
         chat_ids.append(data[1])
+    return chat_ids
 
+def get_admin_tg():
+    get_query = "SELECT chatid FROM tgacc_chatid WHERE tgacc_chatid.admin = 1"
+    db['cursor'].execute(get_query)
+    buff = db['cursor']
+
+    chat_ids = []
+    for data in buff:
+        chat_ids.append(data[0])
     return chat_ids
 
 # Return dict() with settings for bot_id
@@ -154,7 +183,7 @@ def set_actual_zero():
     print("{} All actual values were updated to 0.".format(now_time()))
 
 # Get statuses from database and start/stop bots
-def get_bots_status():
+def get_bots_status(not_notify):
     # Executing query
     get_query = ("SELECT * FROM {}".format(table_status))
     db['cursor'].execute(get_query)
@@ -166,7 +195,7 @@ def get_bots_status():
             # LIKES
             if data[like_s_col] != data[like_a_col]:
                 if data[like_s_col] == 1 and data[like_a_col] == 0:
-                    start(data[bot_id_col], "like")
+                    start(data[bot_id_col], "like", tg_notify=need_notify(not_notify, data[bot_id_col] * 10 + 3))
                     update_db("like_a", 1, data[bot_id_col])
                 elif data[like_s_col] == 0 and data[like_a_col] == 1:
                     stop(data[bot_id_col], "like")
@@ -177,7 +206,7 @@ def get_bots_status():
             # REPOST
             if data[repo_s_col] != data[repo_a_col]:
                 if data[repo_s_col] == 1 and data[repo_a_col] == 0:
-                    start(data[bot_id_col], "repost")
+                    start(data[bot_id_col], "repost", tg_notify=need_notify(not_notify, data[bot_id_col] * 10 + 6))
                     update_db("repost_a", 1, data[bot_id_col])
                 elif data[repo_s_col] == 0 and data[repo_a_col] == 1:
                     stop(data[bot_id_col], "repost")
@@ -188,7 +217,7 @@ def get_bots_status():
             # COMMENT
             if data[comm_s_col] != data[comm_a_col]:
                 if data[comm_s_col] == 1 and data[comm_a_col] == 0:
-                    start(data[bot_id_col], "comment")
+                    start(data[bot_id_col], "comment", tg_notify=need_notify(not_notify, data[bot_id_col] * 10 + 4))
                     update_db("comment_a", 1, data[bot_id_col])
                 elif data[comm_s_col] == 0 and data[comm_a_col] == 1:
                     stop(data[bot_id_col], "comment")
@@ -199,7 +228,7 @@ def get_bots_status():
             # DIRECT
             if data[dire_s_col] != data[dire_a_col]:
                 if data[dire_s_col] == 1 and data[dire_a_col] == 0:
-                    start(data[bot_id_col], "direct")
+                    start(data[bot_id_col], "direct", tg_notify=need_notify(not_notify, data[bot_id_col] * 10 + 5))
                     update_db("direct_a", 1, data[bot_id_col])
                 elif data[dire_s_col] == 0 and data[dire_a_col] == 1:
                     stop(data[bot_id_col], "direct")
@@ -210,13 +239,13 @@ def get_bots_status():
             # FOLLOW
             if data[foll_s_col] != data[foll_a_col]:
                 if data[foll_s_col] == 1 and data[foll_a_col] == 0:
-                    start(data[bot_id_col], "follow")
+                    start(data[bot_id_col], "follow", tg_notify=need_notify(not_notify, data[bot_id_col] * 10 + 1))
                     update_db("follow_a", 1, data[bot_id_col])
                 elif data[foll_s_col] == 0 and data[foll_a_col] == 1:
                     stop(data[bot_id_col], "follow")
                     update_db("follow_a", 0, data[bot_id_col])
                 elif data[foll_s_col] == 2 and data[foll_a_col] == 0:
-                    start(data[bot_id_col], "unfollow")
+                    start(data[bot_id_col], "unfollow", tg_notify=need_notify(not_notify, data[bot_id_col] * 10 + 2))
                     update_db("follow_a", 2, data[bot_id_col])
                 elif data[foll_s_col] == 0 and data[foll_a_col] == 2:
                     stop(data[bot_id_col], "unfollow")

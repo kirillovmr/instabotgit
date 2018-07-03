@@ -26,6 +26,15 @@ else:
     print("{} This platform is not supported. Exiting...".format(now_time()))
     exit()
 
+# Return True or False if needed to notify via telegram
+def need_notify(not_notify, num):
+    try:
+        index = not_notify.index(num)
+        not_notify.pop(index)
+        return False
+    except ValueError:
+        return True
+
 # Return last digit
 def lastdigit(int_):
     return int(str(int_)[len(str(int_))-1])
