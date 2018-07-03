@@ -147,7 +147,7 @@ def checkrun():
                     feedback_required[id]['count'] += 1
                     feedback_required[id]['last_time'] = time.time()
                     feedback_error_count = feedback_required[id]['count']
-                    if feedback_error_count == 2 or feedback_error_count % 10 == 0:
+                    if feedback_error_count == 5 or feedback_error_count % 10 == 0:
                         msg = "Bot {}-'{}' returned 'feedback_required' {} times.".format(id, script.upper(), feedback_error_count)
                         # Telegram inline keyboard
                         username = my_database.get_username_from_id(id)
