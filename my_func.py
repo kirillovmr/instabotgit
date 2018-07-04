@@ -178,7 +178,7 @@ def checkrun():
                     feedback_error_count = feedback_required[id]['count']
                     if feedback_error_count == 5 or feedback_error_count % 10 == 0:
                         # Telegram inline keyboard
-                        inline_button1 = { "text": 'Stop {s} bot'.format(s=script), "callback_data": '/stop {} {}'.format(username, script) }
+                        inline_button1 = { "text": 'Stop {s} bot'.format(s=script), "callback_data": '/stop {} {}'.format(my_database.get_username_from_id(id), script) }
                         inline_keyboard = [[inline_button1]]
                         keyboard = { "inline_keyboard": inline_keyboard }
                         markup = json.JSONEncoder().encode(keyboard)
