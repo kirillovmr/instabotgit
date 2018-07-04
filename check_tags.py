@@ -20,7 +20,7 @@ if "darwin" in platform.lower():
     path_ = "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/instabot"
 elif "linux" in platform.lower():
     print("\tЗапущено на платформе LINUX\n")
-    path_ = "/usr/local/lib/python3.4/dist-packages/instabot"
+    path_ = "/usr/local/lib/python3.5/dist-packages/instabot"
 elif "win32" in platform.lower():
     print("\tЗапущено на платформе WINDOWS\n")
     path_ = "c:\\users\\user\\appdata\\local\\programs\\python\\python37\\lib\\site-packages\\instabot"
