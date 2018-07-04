@@ -170,7 +170,6 @@ def checkrun():
                 print(now_time() + " " + text)
                 my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), text)
                 my_database.update_db("follow_s", 0, id)
-                running.remove(id * 10 + scripttonum(script))
             elif poll == 12:
                 try:
                     feedback_required[id]['count'] += 1
