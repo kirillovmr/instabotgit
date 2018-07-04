@@ -38,6 +38,7 @@ from instabot import Bot, utils
 
 login = "_friendly_company"
 password = "arina4ever699516"
+proxy = "http://oxanaroma:A0z2CkV@31.41.219.235:65233"
 post_link = "https://www.instagram.com/p/"
 result_filename = 'result.txt'
 vip_filename = 'vip.txt'
@@ -54,7 +55,7 @@ if not os.path.exists(dir0 + '/tags'):
 os.chdir(dir)
 
 bot = Bot()
-bot.login(username=login, password=password)
+bot.login(username=login, password=password, proxy=proxy)
 
 # Creating dict of bad users
 bad_users = {}
@@ -167,3 +168,4 @@ f.close()
 
 console_print('\n\tКоличество аккаунтов не выполнивших условия: {}\n'.format(len(bad_users)), color='purple')
 console_print('Результаты сохранены в файле {}\n'.format(result_filename), color='purple')
+input("")
