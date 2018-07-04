@@ -186,6 +186,7 @@ class API(object):
                 msg = "Instagram's error message: {}"
                 self.logger.info(msg.format(response_data.get('message')))
                 if response_data.get('message') == 'feedback_required':
+                    print(response_data)
                     exit(12)
                 if 'error_type' in response_data:
                     msg = 'Error type: {}'.format(response_data['error_type'])

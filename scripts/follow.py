@@ -99,7 +99,10 @@ if settings['follow_type'] == 1:
         for location in locations:
             print(u"Location: {}".format(location))
             bot.api.search_location(location)
-            finded_location = bot.api.last_json['items'][0]
+            loc = random.randint(0, 6)
+            for l in bot.api.last_json['items'][:6]:
+                print(l['title'])
+            finded_location = bot.api.last_json['items'][loc]
             if finded_location:
                 print(u"Found {}".format(finded_location['title']))
                 follow_location_feed(bot, finded_location, amount=int(18))
