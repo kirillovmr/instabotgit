@@ -77,6 +77,22 @@ def numtoscript(int_):
     else:
         print("{} ERROR! numtoscript() func cant parse '{}' param.".format(now_time(), int_))
 
+def scripttosmile(script):
+    if script == "follow":
+        return '👤'
+    elif script == "unfollow":
+        return '👤'
+    elif script == "like":
+        return '♥️'
+    elif script == "comment":
+        return '💬'
+    elif script == "direct":
+        return '✉️'
+    elif script == "repost":
+        return '📣'
+    else:
+        return ''
+
 # Function returns path to script
 # script = like, follow, unfollow, comment, direct
 def script_path(script, id):
@@ -101,7 +117,7 @@ def openlog(id, script):
 
 procs = dict()
 # Starting python script
-def start(id, script, tg_notify=True):
+def start(id, script, restart_manual=False, restart_error=False, tg_notify=True):
     # Making array 2d only once
     try:
         type(procs[id])
@@ -113,7 +129,12 @@ def start(id, script, tg_notify=True):
     if procs[id][script].poll() == None:
         print("{} Bot {}-'{}' was started successfully. PID: {}".format(now_time(), id, script.upper(), procs[id][script].pid))
         if tg_notify:
-            my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "Bot {}-'{}' was started successfully.".format(id, script.upper()))
+            if restart_manual:
+                my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "{} @{} bot was restarted by request".format(scripttosmile(script.lower()), my_database.get_username_from_id(id)))
+            elif restart_error:
+                my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "{} @{} bot was restarted after error".format(scripttosmile(script.lower()), my_database.get_username_from_id(id)))
+            else:
+                my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "{} @{} bot was started".format(scripttosmile(script.lower()), my_database.get_username_from_id(id)))
         running.append(id * 10 + scripttonum(script))
 
 # Stopping python script
@@ -122,16 +143,15 @@ def stop(id, script, r=False, tg_notify=True):
     if not r:
         print("{} Bot {}-'{}' was stopped by request.".format(now_time(), id, script.upper()))
         if tg_notify:
-            my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "Bot {}-'{}' was stopped by request.".format(id, script.upper()))
+            my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "{} @{} bot stopped by request".format(scripttosmile(script.lower()), my_database.get_username_from_id(id)))
     running.remove(id * 10 + scripttonum(script))
 
 # Restarting scripts
 def restart(id, script, tg_notify=True):
     print("{} Bot {}-'{}' going to restart by request.".format(now_time(), id, script.upper()))
-    my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "Bot {}-'{}' going to restart by request.".format(id, script.upper()))
-    stop(id, script, r=True, tg_notify=tg_notify)
+    stop(id, script, r=True)
     time.sleep(5)
-    start(id, script, tg_notify=tg_notify)
+    start(id, script, restart_manual=True)
 
 # Check are scripts still running. If no - restarts
 def checkrun():
@@ -157,16 +177,13 @@ def checkrun():
                     feedback_required[id]['last_time'] = time.time()
                     feedback_error_count = feedback_required[id]['count']
                     if feedback_error_count == 5 or feedback_error_count % 10 == 0:
-                        msg = "Bot {}-'{}' returned 'feedback_required' {} times.".format(id, script.upper(), feedback_error_count)
                         # Telegram inline keyboard
-                        username = my_database.get_username_from_id(id)
-
                         inline_button1 = { "text": 'Stop {s} bot'.format(s=script), "callback_data": '/stop {} {}'.format(username, script) }
                         inline_keyboard = [[inline_button1]]
                         keyboard = { "inline_keyboard": inline_keyboard }
                         markup = json.JSONEncoder().encode(keyboard)
 
-                        my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), msg, replyMarkup=markup)
+                        my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "‼️ @{} {} bot returned 'feedback_required' {} times.".format(my_database.get_username_from_id(id), script, feedback_error_count), replyMarkup=markup)
                 except KeyError:
                     feedback_required[id] = {}
                     feedback_required[id]['count'] = 1
@@ -179,8 +196,8 @@ def checkrun():
             else:
                 text = "{} Bot {}-'{}' was closed. Trying to restart...".format(now_time(), id, script.upper())
                 print(text)
-                my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), text)
-                start(id, script)
+                # my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), text)
+                start(id, script, restart_error=True)
 
 # Clears a feedback_required array if needed. Used to
 def clear_feedback_required():
