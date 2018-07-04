@@ -89,8 +89,7 @@ def repost_photo(bot, new_media_id, path=POSTED_MEDIAS):
         return False
     photo_path = download_photo(media_id=new_media_id, save_description=True)
     time.sleep(5)
-    if not photo_path or not isinstance(photo_path, str):
-        # photo_path could be True, False, or a file path.
+    if not photo_path:
         return False
     try:
         with open(photo_path[:-3] + 'txt', 'r', encoding="utf8") as f:

@@ -41,7 +41,7 @@ sys.path.append(path_)
 from instabot import Bot, utils
 
 login = "_friendly_company"
-password = "zaric4ever"
+password = "arina4ever699516"
 post_link = "https://www.instagram.com/p/"
 result_filename = 'result.txt'
 vip_filename = 'vip.txt'
@@ -58,7 +58,7 @@ if not os.path.exists(dir0 + '/hashtags'):
 os.chdir(dir)
 
 bot = Bot()
-bot.login(username=login, password=password)
+bot.login(username=login, password=password, proxy='http://ssalina76:O9q2RqH@93.190.43.139:65233')
 
 # Creating dict of bad users
 bad_users = {}

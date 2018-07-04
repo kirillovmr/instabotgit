@@ -37,7 +37,7 @@ sys.path.append(path_)
 from instabot import Bot, utils
 
 login = "_friendly_company"
-password = "zaric4ever"
+password = "arina4ever699516"
 post_link = "https://www.instagram.com/p/"
 result_filename = 'result.txt'
 vip_filename = 'vip.txt'
