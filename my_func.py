@@ -168,7 +168,7 @@ def checkrun():
             elif poll == 11:
                 text = "Bot {}-'{}' unfollowed everyone. Bot stopped.".format(id, script.upper())
                 print(now_time() + " " + text)
-                my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), text)
+                my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "👤 {} bot finished unfollowing. Bot stopped".format(my_database.get_username_from_id(id)))
                 my_database.update_db("follow_s", 0, id)
             elif poll == 12:
                 try:
