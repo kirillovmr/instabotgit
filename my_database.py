@@ -90,6 +90,14 @@ def get_admin_tg():
         chat_ids.append(data[0])
     return chat_ids
 
+def get_new_proxy(username):
+    get_query = "SELECT p.proxy FROM proxy p WHERE p.username='{}'".format(username)
+    db['cursor'].execute(get_query)
+    buff = db['cursor']
+
+    for data in buff:
+        return data[0]
+
 # Return dict() with settings for bot_id
 def get_settings(bot_id_):
     # Executing query, storing answer in 'buff'

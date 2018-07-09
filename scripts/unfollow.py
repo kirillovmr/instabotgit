@@ -31,6 +31,11 @@ args = parser.parse_args()
 # Receiving settings for acc
 settings = my_database.get_settings(args.bot_id)
 
+# Receiving proxy from new table
+new_proxy = my_database.get_new_proxy(settings['login'])
+if new_proxy:
+    settings['proxy'] = new_proxy
+
 print("SETTINGS: unfollow_delay: {}, per_day: {}".format(settings['unfollow_delay'], settings['max_unfollows_per_day']))
 
 # Creating folders

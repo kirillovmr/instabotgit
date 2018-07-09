@@ -36,6 +36,11 @@ args = parser.parse_args()
 settings = my_database.get_settings(args.bot_id)
 comments = my_database.get_comments(args.bot_id)
 
+# Receiving proxy from new table
+new_proxy = my_database.get_new_proxy(settings['login'])
+if new_proxy:
+    settings['proxy'] = new_proxy
+
 # Mixing array
 random.shuffle(comments)
 

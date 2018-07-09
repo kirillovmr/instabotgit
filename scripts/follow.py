@@ -50,6 +50,11 @@ args = parser.parse_args()
 # Receiving settings for acc
 settings = my_database.get_settings(args.bot_id)
 
+# Receiving proxy from new table
+new_proxy = my_database.get_new_proxy(settings['login'])
+if new_proxy:
+    settings['proxy'] = new_proxy
+
 if settings['follow_type'] == 1:
     # FOLLOW BY LOCATION
     # Putting locations in array

@@ -161,6 +161,11 @@ args = parser.parse_args()
 settings = get_settings(args.bot_id)
 user_caption = settings["caption"]
 
+# Receiving proxy from new table
+new_proxy = my_database.get_new_proxy(settings['login'])
+if new_proxy:
+    settings['proxy'] = new_proxy
+
 # Putting donors in array
 users_tmp = settings['donors']
 users = [] # Initializing empty array
