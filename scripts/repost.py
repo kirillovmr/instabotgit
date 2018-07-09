@@ -27,7 +27,7 @@ sys.path.append(os.path.join(sys.path[0], '../'))
 sys.path.append(path_)
 from instabot import Bot
 from instabot.bot.bot_support import read_list_from_file
-from my_database import get_settings
+import my_database
 from my_func import now_time
 
 USERNAME_DATABASE = 'username_database.txt'
@@ -158,7 +158,7 @@ parser.add_argument('-bot_id', type=int, help="bot_id")
 args = parser.parse_args()
 
 # Receiving settings for acc
-settings = get_settings(args.bot_id)
+settings = my_database.get_settings(args.bot_id)
 user_caption = settings["caption"]
 
 # Receiving proxy from new table
