@@ -37,7 +37,7 @@ settings = my_database.get_settings(args.bot_id)
 settings['follow_delay'] = round( (24*60*60)/settings['max_follows_per_day'] )
 
 location_array = []
-location_array.append(settings['comment_location'])
+location_array.append(settings['location'])
 
 def follow_location_feed(new_bot, new_location, amount=0):
     counter = 0
