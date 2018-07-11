@@ -139,12 +139,16 @@ def start(id, script, restart_manual=False, restart_error=False, tg_notify=True)
 
 # Stopping python script
 def stop(id, script, r=False, tg_notify=True):
-    procs[id][script].kill()
+    try:
+        procs[id][script].kill()
+    except KeyError:
+        needRemove = False
     if not r:
         print("{} Bot {}-'{}' was stopped by request.".format(now_time(), id, script.upper()))
         if tg_notify:
             my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "{} @{} bot stopped by request".format(scripttosmile(script.lower()), my_database.get_username_from_id(id)))
-    running.remove(id * 10 + scripttonum(script))
+    if needRemove:
+        running.remove(id * 10 + scripttonum(script))
 
 # Restarting scripts
 def restart(id, script, tg_notify=True):
