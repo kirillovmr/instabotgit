@@ -45,7 +45,7 @@ if new_proxy:
 # Mixing array
 random.shuffle(comments)
 
-print("SETTINGS: comment_location: '{}', comment_delay: {}s".format(settings['comment_location'], settings['comment_delay']))
+print("SETTINGS: comment_location: '{}', comment_delay: {}s".format(settings['location'], settings['comment_delay']))
 comments_sent = 0
 
 # Func from examples/commenr_medias_by_location.py
@@ -84,7 +84,7 @@ ncomments = 1
 start_time = datetime.datetime.now()
 
 while True:
-    bot.api.search_location(settings['comment_location'])
+    bot.api.search_location(settings['location'])
     if not bot.api.last_json['items']:
         print(u'Location was not found')
         exit(1)

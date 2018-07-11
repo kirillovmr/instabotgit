@@ -59,7 +59,7 @@ if new_proxy:
 if settings['follow_type'] == 1:
     # FOLLOW BY LOCATION
     # Putting locations in array
-    locations_tmp = settings['comment_location']
+    locations_tmp = settings['location']
     locations = [] # Initializing empty array
     while locations_tmp.find(" ") >= 0:
         pos = locations_tmp.find(" ")
