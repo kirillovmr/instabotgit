@@ -33,21 +33,4 @@ args = parser.parse_args()
 # Receiving settings for acc
 settings = my_database.get_settings(args.bot_id)
 
-print("SETTINGS: max_likes: {}, delay: {}".format(settings['max_likes_per_day'], settings['like_delay']))
-
-# Creating folders
-dir = "{}/accs/{}/logs".format(path_, args.bot_id)
-if not os.path.exists(dir):
-    os.makedirs(dir)
-
-# Changing directory to instabot/accs/bot_id
-os.chdir("{}/accs/{}".format(path_, args.bot_id))
-
-bot = Bot()
-bot.login(username=settings['login'], password=settings['password'],
-          proxy=settings['proxy'])
-
-medias = bot.get_popular_medias()
-for media in medias:
-    print(media)
-    bot.like(1813041755719619022)
+print( my_database.get_bots_status(True) )

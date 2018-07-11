@@ -34,6 +34,7 @@ args = parser.parse_args()
 
 # Receiving settings for acc
 settings = my_database.get_settings(args.bot_id)
+settings['follow_delay'] = round( (24*60*60)/settings['max_follows_per_day'] )
 
 location_array = []
 location_array.append(settings['comment_location'])
@@ -63,7 +64,7 @@ if not os.path.exists(dir):
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 
-bot = Bot(script='follow_l', max_follows_per_day=settings['max_follows_per_day'],
+bot = Bot(script='follow_l', max_follows_per_day=settings['max_follows_per_day']+100,
         follow_delay=settings['follow_delay'], max_following_to_followers_ratio=4,
         max_followers_to_following_ratio=20, filter_business_accounts=False,
         max_followers_to_follow=5000, max_following_to_follow=7500)

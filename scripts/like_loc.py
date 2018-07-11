@@ -49,6 +49,7 @@ args = parser.parse_args()
 
 # Receiving settings for acc
 settings = my_database.get_settings(args.bot_id)
+settings['like_delay'] = round( (24*60*60)/settings['max_likes_per_day'] )
 
 # FOLLOW BY LOCATION
 # Putting locations in array
@@ -70,7 +71,7 @@ if not os.path.exists(dir):
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 
-bot = Bot(script='like', max_likes_per_day=settings['max_likes_per_day'], like_delay=settings['like_delay'])
+bot = Bot(script='like', max_likes_per_day=settings['max_likes_per_day']+100, like_delay=settings['like_delay'])
 bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 
@@ -84,5 +85,5 @@ while True:
             like_location_feed(bot, finded_location, amount=int(18))
             time.sleep(settings['follow_delay'])
         else:
-            bot.logger.info("FOLLOW_LOCATION | Location '{}' was not found.".format(location))
+            bot.logger.info("LIKE_LOCATION | Location '{}' was not found.".format(location))
     exit(10)

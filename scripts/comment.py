@@ -35,6 +35,7 @@ args = parser.parse_args()
 # Receiving settings for acc
 settings = my_database.get_settings(args.bot_id)
 comments = my_database.get_comments(args.bot_id)
+settings['comment_delay'] = round( (24*60*60)/settings['max_comments_per_day'] )
 
 # Receiving proxy from new table
 new_proxy = my_database.get_new_proxy(settings['login'])

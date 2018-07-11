@@ -30,13 +30,14 @@ args = parser.parse_args()
 
 # Receiving settings for acc
 settings = my_database.get_settings(args.bot_id)
+settings['follow_delay'] = round( (24*60*60)/settings['max_follows_per_day'] )
 
 # Receiving proxy from new table
 new_proxy = my_database.get_new_proxy(settings['login'])
 if new_proxy:
     settings['proxy'] = new_proxy
 
-print("SETTINGS: unfollow_delay: {}, per_day: {}".format(settings['unfollow_delay'], settings['max_unfollows_per_day']))
+print("SETTINGS: unfollow_delay: {}, per_day: {}".format(settings['follow_delay'], settings['max_follows_per_day']))
 
 # Creating folders
 dir = "{}/accs/{}/logs".format(path_, args.bot_id)
@@ -46,7 +47,7 @@ if not os.path.exists(dir):
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 
-bot = Bot(script='unfollow', max_unfollows_per_day=settings['max_unfollows_per_day'], unfollow_delay=settings['unfollow_delay'])
+bot = Bot(script='unfollow', max_unfollows_per_day=settings['max_follows_per_day']+100, unfollow_delay=settings['follow_delay'])
 bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 

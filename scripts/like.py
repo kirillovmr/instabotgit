@@ -30,6 +30,7 @@ args = parser.parse_args()
 
 # Receiving settings for acc
 settings = my_database.get_settings(args.bot_id)
+settings['like_delay'] = round( (24*60*60)/settings['max_likes_per_day'] )
 
 # Receiving proxy from new table
 new_proxy = my_database.get_new_proxy(settings['login'])
@@ -58,7 +59,7 @@ if not os.path.exists(dir):
 # Changing directory to instabot/accs/bot_id
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 
-bot = Bot(script='like', max_likes_per_day=settings['max_likes_per_day'], like_delay=settings['like_delay'])
+bot = Bot(script='like', max_likes_per_day=settings['max_likes_per_day']+100, like_delay=settings['like_delay'])
 bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 
