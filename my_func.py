@@ -139,6 +139,7 @@ def start(id, script, restart_manual=False, restart_error=False, tg_notify=True)
 
 # Stopping python script
 def stop(id, script, r=False, tg_notify=True):
+    needRemove = True
     try:
         procs[id][script].kill()
     except KeyError:
