@@ -22,6 +22,9 @@ if "darwin" in platform.lower():
 elif "linux" in platform.lower():
     path_ = "/usr/local/lib/python3.4/dist-packages"
     print("{} Bot launched on LINUX".format(now_time()))
+elif "win32" in platform.lower():
+    path_ = "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python36-32\\Lib\\site-packages"
+    print("{} Bot launched on WINDOWS".format(now_time()))
 else:
     print("{} This platform is not supported. Exiting...".format(now_time()))
     exit()
