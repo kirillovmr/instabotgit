@@ -13,6 +13,8 @@ config = {
 
 if "darwin" in platform.lower():
     table_status = "bot_status_test"
+if "win32" in platform.lower():
+    table_status = "bot_status_test"
 elif "linux" in platform.lower():
     table_status = "bot_status"
 
