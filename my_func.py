@@ -18,12 +18,15 @@ def now_time():
 # Checking launch platform
 if "darwin" in platform.lower():
     path_ = "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages"
+    python = "python3"
     print("{} Bot launched on MAC OS".format(now_time()))
 elif "linux" in platform.lower():
     path_ = "/usr/local/lib/python3.4/dist-packages"
+    python = "python3"
     print("{} Bot launched on LINUX".format(now_time()))
 elif "win32" in platform.lower():
     path_ = "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python36-32\\Lib\\site-packages"
+    python = "python"
     print("{} Bot launched on WINDOWS".format(now_time()))
 else:
     print("{} This platform is not supported. Exiting...".format(now_time()))
@@ -99,7 +102,7 @@ def scripttosmile(script):
 # Function returns path to script
 # script = like, follow, unfollow, comment, direct
 def script_path(script, id):
-    return "python3 {}/instabot/scripts/{}.py -bot_id={}".format(path_, script, id)
+    return "{} {}/instabot/scripts/{}.py -bot_id={}".format(python, path_, script, id)
 
 # Function returns path to log file
 def logfile(id, script):
