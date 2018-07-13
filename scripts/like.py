@@ -63,7 +63,8 @@ if not os.path.exists(dir):
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 
 bot = Bot(script='like', max_likes_per_day=settings['max_likes_per_day']+100, like_delay=settings['like_delay'])
-bot.login(username=settings['login'], password=settings['password'])
+bot.login(username=settings['login'], password=settings['password'],
+          proxy=settings['proxy'])
 
 wait = 5 * 60  # in seconds | Waiting between each hashtag
 
