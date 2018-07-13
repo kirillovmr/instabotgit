@@ -20,17 +20,11 @@ else:
     print("This platform is not supported. Exiting...")
     exit()
 
-sys.path.append(os.path.join(sys.path[0], '../'))
+# sys.path.append(os.path.join(sys.path[0], '../'))
 sys.path.append(path_)
 from instabot import Bot
-import my_database
 
-# Parsing arguments
-parser = argparse.ArgumentParser(add_help=True)
-parser.add_argument('-bot_id', type=int, help="bot_id")
-args = parser.parse_args()
+bot = Bot()
+bot.login(username='rich_kherson', password='khKirillov44')
 
-# Receiving settings for acc
-settings = my_database.get_settings(args.bot_id)
-
-print( my_database.get_bots_status(True) )
+print(bot.get_user_info('rich_kherson'))

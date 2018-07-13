@@ -14,6 +14,9 @@ if "darwin" in platform.lower():
 elif "linux" in platform.lower():
     print("Script launched on LINUX")
     path_ = "/usr/local/lib/python3.4/dist-packages/instabot"
+elif "win32" in platform.lower():
+    print("Script launched on WINDOWS")
+    path_ = "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python36-32\\Lib\\site-packages\\instabot"
 else:
     print("This platform is not supported. Exiting...")
     exit()
@@ -60,8 +63,7 @@ if not os.path.exists(dir):
 os.chdir("{}/accs/{}".format(path_, args.bot_id))
 
 bot = Bot(script='like', max_likes_per_day=settings['max_likes_per_day']+100, like_delay=settings['like_delay'])
-bot.login(username=settings['login'], password=settings['password'],
-          proxy=settings['proxy'])
+bot.login(username=settings['login'], password=settings['password'])
 
 wait = 5 * 60  # in seconds | Waiting between each hashtag
 
