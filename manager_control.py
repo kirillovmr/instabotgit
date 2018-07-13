@@ -1,3 +1,15 @@
+from sys import platform
+
+if "darwin" in platform.lower():
+    python = "python3"
+elif "linux" in platform.lower():
+    python = "python3"
+elif "win32" in platform.lower():
+    python = "python"
+else:
+    print("This platform is not supported. Exiting...")
+    exit()
+
 start_text = '''
 ##################################################
 
@@ -15,7 +27,7 @@ print(start_text)
 from subprocess import call
 from my_func import *
 
-start_manager_command = "python3 {}/instabot/manager.py".format(path_)
+start_manager_command = "{} {}/instabot/manager.py".format(python, path_)
 
 while True:
     manager = call(start_manager_command, shell=True)
