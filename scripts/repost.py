@@ -19,6 +19,9 @@ if "darwin" in platform.lower():
 elif "linux" in platform.lower():
     print("Script launched on LINUX")
     path_ = "/usr/local/lib/python3.4/dist-packages/instabot"
+elif "win32" in platform.lower():
+    print("Script launched on WINDOWS")
+    path_ = "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python36-32\\Lib\\site-packages\\instabot"
 else:
     print("This platform is not supported. Exiting...")
     exit()
