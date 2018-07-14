@@ -3,8 +3,6 @@ from sys import platform
 from my_func import *
 import os
 
-
-
 if "darwin" in platform.lower():
     python = "python3"
 elif "linux" in platform.lower():
@@ -28,8 +26,6 @@ restart_text = '''
 ##################################################
 '''
 print(start_text)
-
-
 
 start_manager_command = "{} {}/manager.py".format(python, path_)
 
