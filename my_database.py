@@ -165,7 +165,7 @@ def set_actual_zero():
     q = ("UPDATE {} SET follow_a=0, like_a=0, comment_a=0, direct_a=0, repost_a=0".format(table_status))
     db['cursor'].execute(q)
     db['cnx'].commit()
-    print("{} All actual values were updated to 0.".format(now_time()))
+    print("{} All actual values were updated to 0.".format(my_func.now_time()))
 
 # Get statuses from database and start/stop bots
 def get_bots_status(not_notify):
