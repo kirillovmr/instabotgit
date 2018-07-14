@@ -1,6 +1,6 @@
 from sys import platform # mac or linux
 import mysql.connector
-from my_func import *
+import my_func
 
 config = {
   'user': 'belyy00_ibot',
@@ -180,80 +180,80 @@ def get_bots_status(not_notify):
             # LIKES
             if data['like_s'] != data['like_a']:
                 if data['like_s'] == 1 and data['like_a'] == 0 :
-                    start(data['bot_id'], "like", tg_notify=need_notify(not_notify, data['bot_id'] * 10 + 3))
+                    my_func.start(data['bot_id'], "like", tg_notify=my_func.need_notify(not_notify, data['bot_id'] * 10 + 3))
                     update_db("like_a", 1, data['bot_id'])
                 elif data['like_s'] == 0 and data['like_a'] == 1:
-                    stop(data['bot_id'], "like")
+                    my_func.stop(data['bot_id'], "like")
                     update_db("like_a", 0, data['bot_id'])
                 elif (data['like_s'] == 9 and data['like_a'] == 1) or (data['like_s'] == 9 and data['like_a'] == 0):
-                    restart(data['bot_id'], "like")
+                    my_func.restart(data['bot_id'], "like")
                     update_db("like_s", 1, data['bot_id'])
                     update_db("like_a", 1, data['bot_id'])
             # REPOST
             if data['repost_s'] != data['repost_a']:
                 if data['repost_s'] == 1 and data['repost_a'] == 0:
-                    start(data['bot_id'], "repost", tg_notify=need_notify(not_notify, data['bot_id'] * 10 + 6))
+                    my_func.start(data['bot_id'], "repost", tg_notify=my_func.need_notify(not_notify, data['bot_id'] * 10 + 6))
                     update_db("repost_a", 1, data['bot_id'])
                 elif data['repost_s'] == 0 and data['repost_a'] == 1:
-                    stop(data['bot_id'], "repost")
+                    my_func.stop(data['bot_id'], "repost")
                     update_db("repost_a", 0, data['bot_id'])
                 elif (data['repost_s'] == 9 and data['repost_a'] == 1) or (data['repost_s'] == 9 and data['repost_a'] == 0):
-                    restart(data['bot_id'], "repost")
+                    my_func.restart(data['bot_id'], "repost")
                     update_db("repost_s", 1, data['bot_id'])
                     update_db("repost_a", 1, data['bot_id'])
             # COMMENT
             if data['comment_s'] != data['comment_a']:
                 if data['comment_s'] == 1 and data['comment_a'] == 0:
-                    start(data['bot_id'], "comment", tg_notify=need_notify(not_notify, data['bot_id'] * 10 + 4))
+                    my_func.start(data['bot_id'], "comment", tg_notify=my_func.need_notify(not_notify, data['bot_id'] * 10 + 4))
                     update_db("comment_a", 1, data['bot_id'])
                 elif data['comment_s'] == 0 and data['comment_a'] == 1:
-                    stop(data['bot_id'], "comment")
+                    my_func.stop(data['bot_id'], "comment")
                     update_db("comment_a", 0, data['bot_id'])
                 elif (data['comment_s'] == 9 and data['comment_a'] == 1) or (data['comment_s'] == 9 and data['comment_a'] == 0):
-                    restart(data['bot_id'], "comment")
+                    my_func.restart(data['bot_id'], "comment")
                     update_db("comment_s", 1, data['bot_id'])
                     update_db("comment_a", 1, data['bot_id'])
             # DIRECT
             if data['direct_s'] != data['direct_a']:
                 if data['direct_s'] == 1 and data['direct_a'] == 0:
-                    start(data['bot_id'], "direct", tg_notify=need_notify(not_notify, data['bot_id'] * 10 + 5))
+                    my_func.start(data['bot_id'], "direct", tg_notify=my_func.need_notify(not_notify, data['bot_id'] * 10 + 5))
                     update_db("direct_a", 1, data['bot_id'])
                 elif data['direct_s'] == 0 and data['direct_a'] == 1:
-                    stop(data['bot_id'], "direct")
+                    my_func.stop(data['bot_id'], "direct")
                     update_db("direct_a", 0, data['bot_id'])
                 elif (data['direct_s'] == 9 and data['direct_a'] == 1) or (data['direct_s'] == 9 and data['direct_a'] == 0):
-                    restart(data['bot_id'], "direct")
+                    my_func.restart(data['bot_id'], "direct")
                     update_db("direct_s", 1, data['bot_id'])
                     update_db("direct_a", 1, data['bot_id'])
             # FOLLOW
             if data['follow_s'] != data['follow_a']:
                 if data['follow_s'] == 1 and data['follow_a'] == 0:
-                    start(data['bot_id'], "follow", tg_notify=need_notify(not_notify, data['bot_id'] * 10 + 1))
+                    my_func.start(data['bot_id'], "follow", tg_notify=my_func.need_notify(not_notify, data['bot_id'] * 10 + 1))
                     update_db("follow_a", 1, data['bot_id'])
                 elif data['follow_s'] == 0 and data['follow_a'] == 1:
-                    stop(data['bot_id'], "follow")
+                    my_func.stop(data['bot_id'], "follow")
                     update_db("follow_a", 0, data['bot_id'])
                 elif data['follow_s'] == 2 and data['follow_a'] == 0:
-                    start(data['bot_id'], "unfollow", tg_notify=need_notify(not_notify, data['bot_id'] * 10 + 2))
+                    my_func.start(data['bot_id'], "unfollow", tg_notify=my_func.need_notify(not_notify, data['bot_id'] * 10 + 2))
                     update_db("follow_a", 2, data['bot_id'])
                 elif data['follow_s'] == 0 and data['follow_a'] == 2:
-                    stop(data['bot_id'], "unfollow")
+                    my_func.stop(data['bot_id'], "unfollow")
                     update_db("follow_a", 0, data['bot_id'])
                 elif data['follow_s'] == 2 and data['follow_a'] == 1:
-                    stop(data['bot_id'], "follow")
+                    my_func.stop(data['bot_id'], "follow")
                     time.sleep(5)
                     start(data['bot_id'], "unfollow")
                     update_db("follow_a", 2, data['bot_id'])
                 elif data['follow_s'] == 1 and data['follow_a'] == 2:
-                    stop(data['bot_id'], "unfollow")
+                    my_func.stop(data['bot_id'], "unfollow")
                     time.sleep(5)
-                    start(data['bot_id'], "follow")
+                    my_func.start(data['bot_id'], "follow")
                     update_db("follow_a", 1, data['bot_id'])
                 elif (data['follow_s'] == 9 and data['follow_a'] == 1) or (data['follow_s'] == 9 and data['follow_a'] == 0):
-                    restart(data['bot_id'], "follow")
+                    my_func.restart(data['bot_id'], "follow")
                     update_db("follow_s", 1, data['bot_id'])
                     update_db("follow_a", 1, data['bot_id'])
                 elif (data['follow_s'] == 9 and data['follow_a'] == 2):
-                    restart(data['bot_id'], "unfollow")
+                    my_func.restart(data['bot_id'], "unfollow")
                     update_db("follow_s", 2, data['bot_id'])
                     update_db("follow_a", 2, data['bot_id'])
