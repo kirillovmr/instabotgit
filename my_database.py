@@ -158,7 +158,7 @@ def update_db(param, value, bot_id):
     q = ("UPDATE {} SET {}={} WHERE bot_id={}".format(table_status, param, value, bot_id))
     db['cursor'].execute(q)
     db['cnx'].commit()
-    print("{} BOT ID {} | Updated {} with value {}".format(now_time(), bot_id, param, value))
+    print("{} BOT ID {} | Updated {} with value {}".format(my_func.now_time(), bot_id, param, value))
 
 # Set all actual values to 0 in database. Use it after manager restart
 def set_actual_zero():
