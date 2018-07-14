@@ -31,7 +31,7 @@ print(start_text)
 
 
 
-start_manager_command = "{} {}/instabot/manager.py".format(python, path_)
+start_manager_command = "{} {}/manager.py".format(python, path_)
 
 while True:
     manager = call(start_manager_command, shell=True)
