@@ -1,4 +1,9 @@
+from subprocess import call
 from sys import platform
+from my_func import *
+import os
+
+
 
 if "darwin" in platform.lower():
     python = "python3"
@@ -24,8 +29,7 @@ restart_text = '''
 '''
 print(start_text)
 
-from subprocess import call
-from my_func import *
+
 
 start_manager_command = "{} {}/instabot/manager.py".format(python, path_)
 
