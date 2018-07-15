@@ -169,6 +169,9 @@ new_proxy = my_database.get_new_proxy(settings['login'])
 if new_proxy:
     settings['proxy'] = new_proxy
 
+# Closing connection to database
+my_database.db['cnx'].close()
+
 # Putting donors in array
 users_tmp = settings['donors']
 users = [] # Initializing empty array

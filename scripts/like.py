@@ -40,6 +40,9 @@ new_proxy = my_database.get_new_proxy(settings['login'])
 if new_proxy:
     settings['proxy'] = new_proxy
 
+# Closing connection to database
+my_database.db['cnx'].close()
+
 # Putting hashtags in array
 hashtags_tmp = settings['like_hashtags']
 hashtags = [] # Initializing empty array

@@ -39,6 +39,9 @@ args = parser.parse_args()
 settings = my_database.get_settings(args.bot_id)
 settings['follow_delay'] = round( (24*60*60)/settings['max_follows_per_day'] )
 
+# Closing connection to database
+my_database.db['cnx'].close()
+
 location_array = []
 location_array.append(settings['location'])
 

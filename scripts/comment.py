@@ -45,6 +45,9 @@ new_proxy = my_database.get_new_proxy(settings['login'])
 if new_proxy:
     settings['proxy'] = new_proxy
 
+# Closing connection to database
+my_database.db['cnx'].close()
+
 # Mixing array
 random.shuffle(comments)
 

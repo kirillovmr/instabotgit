@@ -54,6 +54,9 @@ args = parser.parse_args()
 settings = my_database.get_settings(args.bot_id)
 settings['like_delay'] = round( (24*60*60)/settings['max_likes_per_day'] )
 
+# Closing connection to database
+my_database.db['cnx'].close()
+
 # FOLLOW BY LOCATION
 # Putting locations in array
 locations_tmp = settings['location']

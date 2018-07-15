@@ -1,6 +1,6 @@
 from sys import platform # mac or linux
-import mysql.connector
 import my_func
+import mysql.connector
 
 config = {
   'user': 'belyy00_ibot',
@@ -11,11 +11,11 @@ config = {
   'collation': 'utf8mb4_general_ci'
 }
 
-if "darwin" in my_func.platform():
+if "darwin" in platform.lower():
     table_status = "bot_status_test"
-if "win32" in my_func.platform():
+if "win32" in platform.lower():
     table_status = "bot_status"
-elif "linux" in my_func.platform():
+elif "linux" in platform.lower():
     table_status = "bot_status"
 
 db = {'cnx': 0, 'cursor': 0}

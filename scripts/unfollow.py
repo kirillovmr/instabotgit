@@ -40,6 +40,9 @@ new_proxy = my_database.get_new_proxy(settings['login'])
 if new_proxy:
     settings['proxy'] = new_proxy
 
+# Closing connection to database
+my_database.db['cnx'].close()
+
 print("SETTINGS: unfollow_delay: {}, per_day: {}".format(settings['follow_delay'], settings['max_follows_per_day']))
 
 # Creating folders
