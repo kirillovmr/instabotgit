@@ -39,7 +39,7 @@ else:
     print("{} This platform is not supported. Exiting...".format(now_time()))
     exit()
 
-gitfetch(path_)
+# gitfetch(path_)
 
 # Return True or False if needed to notify via telegram
 def need_notify(not_notify, num):
