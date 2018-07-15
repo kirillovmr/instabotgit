@@ -217,6 +217,9 @@ def print_running():
         script = numtoscript(lastdigit(num))
         print("Bot {} - {}". format(id, script.upper()))
 
+def now_time():
+    return "{}:{}:{}".format(datetime.now().hour, datetime.now().minute, datetime.now().second)
+
 def print_running_array():
     print("{} Running: {}".format(now_time(), sorted(running)))
 
@@ -228,9 +231,6 @@ def python_version():
         return "python3"
     elif "win32" in platform():
         return "python"
-
-def now_time():
-    return "{}:{}:{}".format(datetime.now().hour, datetime.now().minute, datetime.now().second)
 
 def path():
     if "darwin" in platform():
