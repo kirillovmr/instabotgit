@@ -1,10 +1,9 @@
-from sys import platform
 import my_database
 import my_telegram
 import my_func
 import time
 
-my_telegram.send_mess_tg(my_database.get_admin_tg(), "👇\n✅ Manager started on {}\n👆".format(platform.lower()))
+my_telegram.send_mess_tg(my_database.get_admin_tg(), "✅ Manager started on {}".format(my_func.platform()))
 
 not_notify = my_database.fill_not_notify_array()
 

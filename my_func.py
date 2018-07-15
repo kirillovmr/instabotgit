@@ -1,10 +1,10 @@
 from subprocess import Popen, PIPE, call
 from datetime import datetime
-from sys import platform # mac or linux
 import my_telegram
 import my_database
 import time
 import json
+import sys
 import os
 
 # Array of running scripts
@@ -12,34 +12,13 @@ running = []
 
 feedback_required = {}
 
-def now_time():
-    return "{}:{}:{}".format(datetime.now().hour, datetime.now().minute, datetime.now().second)
-
-def gitfetch(_path):
-    os.chdir(_path)
+# Getting latest version from git
+def gitfetch(path):
+    os.chdir(path)
     os.system("git remote add instabotgit https://github.com/kirillovmr/instabotgit")
     os.system("git fetch instabotgit master")
     os.system("git reset --hard FETCH_HEAD")
     os.system("git clean -df")
-
-# Checking launch platform
-if "darwin" in platform.lower():
-    path_ = "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/instabot"
-    python = "python3"
-    print("{} Bot launched on MAC OS".format(now_time()))
-elif "linux" in platform.lower():
-    path_ = "/usr/local/lib/python3.4/dist-packages/instabot"
-    python = "python3"
-    print("{} Bot launched on LINUX".format(now_time()))
-elif "win32" in platform.lower():
-    path_ = "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python36-32\\Lib\\site-packages\\instabot"
-    python = "python"
-    print("{} Bot launched on WINDOWS".format(now_time()))
-else:
-    print("{} This platform is not supported. Exiting...".format(now_time()))
-    exit()
-
-# gitfetch(path_)
 
 # Return True or False if needed to notify via telegram
 def need_notify(not_notify, num):
@@ -111,11 +90,11 @@ def scripttosmile(script):
 # Function returns path to script
 # script = like, follow, unfollow, comment, direct
 def script_path(script, id):
-    return "{} {}/scripts/{}.py -bot_id={}".format(python, path_, script, id)
+    return "{} {}/scripts/{}.py -bot_id={}".format(python_version(), path(), script, id)
 
 # Function returns path to log file
 def logfile(id, script):
-    return "{}/accs/{}/logs/{}.log".format(path_, id, script)
+    return "{}/accs/{}/logs/{}.log".format(path(), id, script)
 
 log = dict()
 # Opening log file with write option
@@ -123,7 +102,7 @@ def openlog(id, script):
     log[id] = dict() # making it 2d
 
     # Creating folders
-    dir = "{}/accs/{}/logs".format(path_, id)
+    dir = "{}/accs/{}/logs".format(path(), id)
     if not os.path.exists(dir):
         os.makedirs(dir)
 
@@ -239,3 +218,39 @@ def print_running():
 
 def print_running_array():
     print("{} Running: {}".format(now_time(), sorted(running)))
+
+def platform():
+    return sys.platform.lower()
+
+def python_version():
+    if "darwin" in platform() or "linux" in platform():
+        return "python3"
+    elif "win32" in platform():
+        return "python"
+
+def now_time():
+    return "{}:{}:{}".format(datetime.now().hour, datetime.now().minute, datetime.now().second)
+
+def path():
+    if "darwin" in platform():
+        return "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/instabot"
+    elif "linux" in platform():
+        return "/usr/local/lib/python3.4/dist-packages/instabot"
+    elif "win32" in platform():
+        return "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python36-32\\Lib\\site-packages\\instabot"
+    else:
+        print("{} This platform is not supported. Exiting...".format(now_time()))
+        exit()
+
+mc_start_text = '''
+    ###################################
+
+    ########     MC STARTED    ########
+
+    ###################################
+    '''
+mc_restart_text = '''
+    ###################################
+    #    MC closed. restarting....    #
+    ###################################
+    '''
