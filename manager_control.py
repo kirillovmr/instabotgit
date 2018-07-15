@@ -1,17 +1,10 @@
 from subprocess import call
 from sys import platform
 from my_func import *
+import misc
 import os
 
-if "darwin" in platform.lower():
-    python = "python3"
-elif "linux" in platform.lower():
-    python = "python3"
-elif "win32" in platform.lower():
-    python = "python"
-else:
-    print("This platform is not supported. Exiting...")
-    exit()
+python = misc.python_version()
 
 start_text = '''
 ##################################################
