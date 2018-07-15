@@ -19,7 +19,7 @@ def gitfetch(path):
     os.system("git fetch instabotgit master")
     os.system("git reset --hard FETCH_HEAD")
     os.system("git clean -df")
-    print("\n\n{} Last version received.".format(now_time()))
+    print("\n{} Last version received.\n".format(now_time()))
 
 # Return True or False if needed to notify via telegram
 def need_notify(not_notify, num):
@@ -242,6 +242,14 @@ def path():
     else:
         print("{} This platform is not supported. Exiting...".format(now_time()))
         exit()
+
+def table_status():
+    if "darwin" in platform():
+        return "bot_status_test"
+    elif "linux" in platform():
+        return "bot_status"
+    elif "win32" in platform():
+        return "bot_status_test"
 
 mc_start_text = '''
     ###################################
