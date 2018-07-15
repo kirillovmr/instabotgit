@@ -19,7 +19,7 @@ def gitfetch(path):
     os.system("git fetch instabotgit master")
     os.system("git reset --hard FETCH_HEAD")
     os.system("git clean -df")
-    print("\n\n{} Last version received.")
+    print("\n\n{} Last version received.".format(now_time()))
 
 # Return True or False if needed to notify via telegram
 def need_notify(not_notify, num):
