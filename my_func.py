@@ -243,14 +243,6 @@ def path():
         print("{} This platform is not supported. Exiting...".format(now_time()))
         exit()
 
-def table_status():
-    if "darwin" in platform():
-        return "bot_status_test"
-    elif "linux" in platform():
-        return "bot_status"
-    elif "win32" in platform():
-        return "bot_status_test"
-
 mc_start_text = '''
     ###################################
 

@@ -11,7 +11,12 @@ config = {
   'collation': 'utf8mb4_general_ci'
 }
 
-table_status = my_func.table_status()
+if "darwin" in my_func.platform():
+    table_status = "bot_status_test"
+if "win32" in my_func.platform():
+    table_status = "bot_status"
+elif "linux" in my_func.platform():
+    table_status = "bot_status"
 
 db = {'cnx': 0, 'cursor': 0}
 db['cnx'] = mysql.connector.connect(**config)
