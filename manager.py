@@ -20,10 +20,10 @@ while True:
 
     # Print running scripts
     my_func.print_running_array()
+    if len(not_notify):
+        print("--/--/-- N notif: {}".format(not_notify))
 
     # Clears a feedback_required array if needed. Used to
     my_func.clear_feedback_required()
-
-    print(not_notify)
 
     time.sleep(30)

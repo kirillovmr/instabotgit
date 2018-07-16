@@ -12,6 +12,9 @@ running = []
 
 feedback_required = {}
 
+def now_time():
+    return "{}:{}:{}".format(datetime.now().hour, datetime.now().minute, datetime.now().second)
+
 # Getting latest version from git
 def gitfetch(path):
     os.chdir(path)
@@ -122,7 +125,7 @@ def start(id, script, restart_manual=False, restart_error=False, tg_notify=True)
     procs[id][script] = Popen(script_path(script, id), shell=True, stdout=openlog(id, script), stderr=PIPE)
     # procs[id][script] = call(script_path(script, id), shell=True)
     if procs[id][script].poll() == None:
-        print("{} Bot {}-'{}' was started successfully. PID: {}".format(now_time(), id, script.upper(), procs[id][script].pid))
+        print("{} {}{} started: {}".format(now_time(), id, scripttonum(script), procs[id][script].pid))
         if tg_notify:
             if restart_manual:
                 my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "{} @{} bot was restarted by request".format(scripttosmile(script.lower()), my_database.get_username_from_id(id)))
@@ -140,7 +143,7 @@ def stop(id, script, r=False, tg_notify=True):
     except KeyError:
         needRemove = False
     if not r:
-        print("{} Bot {}-'{}' was stopped by request.".format(now_time(), id, script.upper()))
+        print("{} {}{} stopped (r)".format(now_time(), id, scripttonum(script)))
         if tg_notify:
             my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "{} @{} bot stopped by request".format(scripttosmile(script.lower()), my_database.get_username_from_id(id)))
     if needRemove:
@@ -148,7 +151,7 @@ def stop(id, script, r=False, tg_notify=True):
 
 # Restarting scripts
 def restart(id, script, tg_notify=True):
-    print("{} Bot {}-'{}' going to restart by request.".format(now_time(), id, script.upper()))
+    print("{} {}{} restarting (r)".format(now_time(), id, scripttonum(script)))
     stop(id, script, r=True)
     time.sleep(5)
     start(id, script, restart_manual=True)
@@ -162,12 +165,12 @@ def checkrun():
         if poll != None:
             running.remove(num)
             if poll == 10:
-                text = "{} Bot {}-'{}' finished cycle. Restarting.".format(now_time(), id, script.upper())
+                text = "{} {}{} finished cycle".format(now_time(), id, scripttonum(script))
                 print(text)
                 start(id, script, tg_notify=False)
             elif poll == 11:
-                text = "Bot {}-'{}' unfollowed everyone. Bot stopped.".format(id, script.upper())
-                print(now_time() + " " + text)
+                text = "{} {}{} unfollowed everyone. Stopped.".format(now_time(), id, scripttonum(script))
+                print(text)
                 my_telegram.send_mess_tg(my_database.get_chat_ids_tg(id), "👤 {} bot finished unfollowing. Bot stopped".format(my_database.get_username_from_id(id)))
                 my_database.update_db("follow_s", 0, id)
             elif poll == 12:
@@ -206,7 +209,7 @@ def clear_feedback_required():
         diff = now_time - last_error_time
         if diff > 4:
             feedback_required.pop(acc)
-    print(feedback_required)
+    print("--/--/-- Feedbck: {}" . format(feedback_required))
 
 
 # Print working scripts
@@ -216,9 +219,6 @@ def print_running():
         id = removelastdigit(num)
         script = numtoscript(lastdigit(num))
         print("Bot {} - {}". format(id, script.upper()))
-
-def now_time():
-    return "{}:{}:{}".format(datetime.now().hour, datetime.now().minute, datetime.now().second)
 
 def print_running_array():
     print("{} Running: {}".format(now_time(), sorted(running)))

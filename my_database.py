@@ -22,18 +22,6 @@ db = {'cnx': 0, 'cursor': 0}
 db['cnx'] = mysql.connector.connect(**config)
 db['cursor'] = db['cnx'].cursor(buffered=True, dictionary=True)
 
-bot_id_col = 0
-foll_s_col = 1
-like_s_col = 2
-comm_s_col = 3
-dire_s_col = 4
-foll_a_col = 5
-like_a_col = 6
-comm_a_col = 7
-dire_a_col = 8
-repo_s_col = 9
-repo_a_col = 10
-
 # Return db dict
 def db_connect():
     db1 = {'cnx': 0, 'cursor': 0}
@@ -158,14 +146,14 @@ def update_db(param, value, bot_id):
     q = ("UPDATE {} SET {}={} WHERE bot_id={}".format(table_status, param, value, bot_id))
     db['cursor'].execute(q)
     db['cnx'].commit()
-    print("{} BOT ID {} | Updated {} with value {}".format(my_func.now_time(), bot_id, param, value))
+    # print("{} BOT ID {} | Updated {} with value {}".format(my_func.now_time(), bot_id, param, value))
 
 # Set all actual values to 0 in database. Use it after manager restart
 def set_actual_zero():
     q = ("UPDATE {} SET follow_a=0, like_a=0, comment_a=0, direct_a=0, repost_a=0".format(table_status))
     db['cursor'].execute(q)
     db['cnx'].commit()
-    print("{} All actual values were updated to 0.".format(my_func.now_time()))
+    print("{} DB 'actual' -> 0".format(my_func.now_time()))
 
 # Get statuses from database and start/stop bots
 def get_bots_status(not_notify):

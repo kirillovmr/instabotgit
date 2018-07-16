@@ -61,7 +61,11 @@ def repost_best_photos(bot, users, amount=1):
 
 def sort_best_medias(bot, media_ids, amount=1):
     best_medias = [bot.get_media_info(media)[0] for media in tqdm(media_ids, desc='Getting media info')]
-    best_medias = sorted(best_medias, key=lambda x: (x['like_count'], x['comment_count']), reverse=True)
+    try:
+        best_medias = sorted(best_medias, key=lambda x: (x['like_count'], x['comment_count']), reverse=True)
+    except KeyError:
+        print("key error")
+        best_medias = sorted(best_medias, key=lambda x: (x['like_count']), reverse=True)
     return [best_media['pk'] for best_media in best_medias[:amount]]
 
 def get_not_used_medias_from_users(bot, users=None, users_path=USERNAME_DATABASE):
@@ -70,7 +74,10 @@ def get_not_used_medias_from_users(bot, users=None, users_path=USERNAME_DATABASE
     users = map(str, users)
     total_medias = []
     for user in users:
-        medias = bot.get_user_medias(user, filtration=False)
+        if user == settings['login']:
+            medias = bot.get_user_tags_medias(bot.convert_to_user_id(user))
+        else:
+            medias = bot.get_user_medias(user, filtration=False)
         medias = [media for media in medias if not exists_in_posted_medias(media)]
         total_medias.extend(medias)
     return total_medias
@@ -141,11 +148,16 @@ def download_photo(media_id, folder='photos', filename=None, save_description=Fa
         os.makedirs(folder)
     if save_description:
         media = bot.get_media_info(media_id)[0]
+
         caption = media['caption']['text']
-
-        caption = edit_caption(caption)
-
         username = media['user']['username']
+
+        # Checking if reposting from self tags feed
+        if users[posted % len(users)] == settings['login']:
+            caption = user_caption.format(username)
+        else:
+            caption = edit_caption(caption)
+
         fname = os.path.join(folder, '{}_{}.txt'.format(username, media_id))
         with open(fname, encoding='utf8', mode='w') as f:
             f.write(caption)
