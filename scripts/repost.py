@@ -154,7 +154,7 @@ def download_photo(media_id, folder='photos', filename=None, save_description=Fa
 
         # Checking if reposting from self tags feed
         if users[posted % len(users)] == settings['login']:
-            caption = user_caption.format(username)
+            caption = user_caption.format("@" + username)
         else:
             caption = edit_caption(caption)
 
