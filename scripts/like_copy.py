@@ -1,5 +1,5 @@
 """
-    Bot - Infinity location liker.
+    Bot - Infinity hashtags liker.
 """
 import os
 import sys
@@ -69,15 +69,10 @@ bot = Bot(script='like', max_likes_per_day=settings['max_likes_per_day']+100, li
 bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 
+wait = 5 * 60  # in seconds | Waiting between each hashtag
+
 while True:
-    for location in locations:
-        print(u"Location: {}".format(location))
-        bot.api.search_location(location)
-        finded_location = bot.api.last_json['items'][0]
-        if finded_location:
-            print(u"Found {}".format(finded_location['title']))
-            like_location_feed(bot, finded_location, amount=int(18))
-            time.sleep(settings['follow_delay'])
-        else:
-            bot.logger.info("LIKE_LOCATION | Location '{}' was not found.".format(location))
-    exit(10)
+    for hashtag in hashtags:
+        bot.like_hashtag(hashtag)
+        time.sleep(wait)
+        exit(10)
