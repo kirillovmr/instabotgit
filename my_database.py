@@ -1,5 +1,6 @@
 from sys import platform # mac or linux
 import my_func
+import time
 import mysql.connector
 
 config = {
