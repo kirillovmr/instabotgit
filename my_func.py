@@ -236,7 +236,7 @@ def path():
     if "darwin" in platform():
         return "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/instabot"
     elif "linux" in platform():
-        return "/usr/local/lib/python3.4/dist-packages/instabot"
+        return "/usr/local/lib/python3.5/dist-packages/instabot"
     elif "win32" in platform():
         return "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python36-32\\Lib\\site-packages\\instabot"
     else:
