@@ -1,5 +1,5 @@
 """
-    Bot - Infinity hashtags liker.
+    Bot - Infinity location liker.
 """
 import os
 import sys

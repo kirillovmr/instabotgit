@@ -45,25 +45,18 @@ args = parser.parse_args()
 settings = my_database.get_settings(args.bot_id)
 settings['like_delay'] = round( (24*60*60)/settings['max_likes_per_day'] )
 
-# Receiving proxy from new table
-new_proxy = my_database.get_new_proxy(settings['login'])
-if new_proxy:
-    settings['proxy'] = new_proxy
-
 # Closing connection to database
 my_database.db['cnx'].close()
 
-# Putting hashtags in array
-hashtags_tmp = settings['like_hashtags']
-hashtags = [] # Initializing empty array
-while hashtags_tmp.find(" ") >= 0:
-    pos = hashtags_tmp.find(" ")
-    hashtags.append(hashtags_tmp[:pos])
-    hashtags_tmp = hashtags_tmp[pos+1:]
-hashtags.append(hashtags_tmp) # Appending to array last hashtag
-
-# Mixing array
-random.shuffle(hashtags)
+# FOLLOW BY LOCATION
+# Putting locations in array
+locations_tmp = settings['location']
+locations = [] # Initializing empty array
+while locations_tmp.find(" ") >= 0:
+    pos = locations_tmp.find(" ")
+    locations.append(locations_tmp[:pos])
+    locations_tmp = locations_tmp[pos+1:]
+locations.append(locations_tmp) # Appending to array last hashtag
 
 print("SETTINGS: max_likes: {}, delay: {}".format(settings['max_likes_per_day'], settings['like_delay']))
 
@@ -80,14 +73,14 @@ bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 
 while True:
-    location = settings['location']
-    print(u"Location: {}".format(location))
-    bot.api.search_location(location)
-    finded_location = bot.api.last_json['items'][0]
-    if finded_location:
-        print(u"Found {}".format(finded_location['title']))
-        like_location_feed(bot, finded_location, amount=int(18))
-        time.sleep(settings['follow_delay'])
-    else:
-        bot.logger.info("LIKE_LOCATION | Location '{}' was not found.".format(location))
+    for location in locations:
+        print(u"Location: {}".format(location))
+        bot.api.search_location(location)
+        finded_location = bot.api.last_json['items'][0]
+        if finded_location:
+            print(u"Found {}".format(finded_location['title']))
+            like_location_feed(bot, finded_location, amount=int(18))
+            time.sleep(settings['follow_delay'])
+        else:
+            bot.logger.info("LIKE_LOCATION | Location '{}' was not found.".format(location))
     exit(10)
