@@ -250,7 +250,7 @@ def get_bots_status(not_notify):
                 elif data['follow_s'] == 2 and data['follow_a'] == 1:
                     my_func.stop(data['bot_id'], "follow")
                     time.sleep(5)
-                    start(data['bot_id'], "unfollow")
+                    my_func.start(data['bot_id'], "unfollow")
                     update_db("follow_a", 2, data['bot_id'])
                 elif data['follow_s'] == 1 and data['follow_a'] == 2:
                     my_func.stop(data['bot_id'], "unfollow")
