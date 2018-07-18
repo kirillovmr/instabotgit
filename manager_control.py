@@ -11,4 +11,4 @@ start_manager_command = "{} {}/manager.py".format(my_func.python_version(), my_f
 while True:
     manager = call(start_manager_command, shell=True)
     print(my_func.mc_restart_text)
-    time.sleep(20)
+    time.sleep(10)
