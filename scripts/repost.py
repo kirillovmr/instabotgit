@@ -50,7 +50,11 @@ def repost_best_photos(bot, users, amount=1):
     medias = get_not_used_medias_from_users(bot, users)
     medias = sort_best_medias(bot, medias, amount)
     for media in tqdm(medias, desc='Reposting photos'):
-        repost_photo(bot, media)
+        if repost_photo(bot, media):
+            print("ok")
+        else:
+            update_posted_medias(media, POSTED_MEDIAS)
+            print("nope")
 
 def sort_best_medias(bot, media_ids, amount=1):
     best_medias = [bot.get_media_info(media)[0] for media in tqdm(media_ids, desc='Getting media info')]
@@ -101,6 +105,7 @@ def repost_photo(bot, new_media_id, path=POSTED_MEDIAS):
         if bot.upload_photo(photo_path, text):
             update_posted_medias(new_media_id, path)
             bot.logger.info('Media_id {0} is saved in {1}'.format(new_media_id, path))
+            return True
         else:
             print("not posted")
     except TypeError:
