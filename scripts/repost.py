@@ -36,6 +36,8 @@ from my_func import now_time
 USERNAME_DATABASE = 'username_database.txt'
 POSTED_MEDIAS = 'posted_medias.txt'
 
+last_medias_id = []
+
 # Return time of last photo posted
 def last_post_time():
     medias = bot.get_your_medias()
@@ -108,6 +110,8 @@ def repost_photo(bot, new_media_id, path=POSTED_MEDIAS):
         if bot.upload_photo(photo_path, text):
             update_posted_medias(new_media_id, path)
             bot.logger.info('Media_id {0} is saved in {1}'.format(new_media_id, path))
+        else:
+            print("not posted")
     except TypeError:
         update_posted_medias(new_media_id, path)
         bot.logger.info('ERROR. Ignore this photo')
