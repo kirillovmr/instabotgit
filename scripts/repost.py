@@ -204,6 +204,7 @@ random.shuffle(users)
 
 # Setting delay between posts in minutes
 delay_between_posts = settings["repost_delay"]
+delay_between_posts = 1
 
 print("SETTINGS: delay_between_posts: {} min.".format(settings['repost_delay']))
 
