@@ -156,6 +156,25 @@ def set_actual_zero():
     db['cnx'].commit()
     print("{} DB 'actual' -> 0".format(my_func.now_time()))
 
+def update_command_db(param, value, os):
+    q = ("UPDATE server SET {}={} WHERE os='{}'".format(param, value, os))
+    db['cursor'].execute(q)
+    db['cnx'].commit()
+
+def check_commands():
+    # Executing query
+    q = ("SELECT * FROM server WHERE os='{}'".format(platform.lower()))
+    db['cursor'].execute(q)
+
+    # Going through status and start/stop appropriate bots
+    commands = db['cursor']
+    for command in commands:
+        if command['restart'] == 1:
+            print("MANAGER RESTARTING (r)")
+            update_command_db('restart', 0, platform.lower())
+            exit(99)
+
+
 # Get statuses from database and start/stop bots
 def get_bots_status(not_notify):
     # Executing query

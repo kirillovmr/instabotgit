@@ -3,6 +3,8 @@ import my_telegram
 import my_func
 import time
 
+my_func.gitfetch(my_func.path())
+
 my_telegram.send_mess_tg(my_database.get_admin_tg(), "✅ Manager started on {}".format(my_func.platform()))
 
 not_notify = my_database.fill_not_notify_array()
@@ -11,6 +13,8 @@ not_notify = my_database.fill_not_notify_array()
 my_database.set_actual_zero()
 
 while True:
+
+    my_database.check_commands()
 
     # Get statuses from database and start/stop bots
     my_database.get_bots_status(not_notify=not_notify)

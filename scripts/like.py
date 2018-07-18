@@ -8,6 +8,8 @@ import random
 import argparse
 from sys import platform # mac or linux
 
+from tqdm import tqdm
+
 sys.path.append(os.path.join(sys.path[0], '../'))
 
 import my_func
@@ -16,6 +18,23 @@ path_ = my_func.path()
 sys.path.append(path_)
 from instabot import Bot
 import my_database
+
+def like_location_feed(new_bot, new_location, amount=0):
+    counter = 0
+    max_id = ''
+    with tqdm(total=amount) as pbar:
+        while counter < amount:
+            if new_bot.api.get_location_feed(new_location['location']['pk'], max_id=max_id):
+                location_feed = new_bot.api.last_json
+                for media in new_bot.filter_medias(location_feed["items"][:amount], quiet=True):
+                    print(media)
+                    if bot.like(media):
+                        counter += 1
+                        pbar.update(1)
+                if not location_feed.get('next_max_id'):
+                    return False
+                max_id = location_feed['next_max_id']
+    return True
 
 # Parsing arguments
 parser = argparse.ArgumentParser(add_help=True)
@@ -61,14 +80,14 @@ bot.login(username=settings['login'], password=settings['password'],
           proxy=settings['proxy'])
 
 while True:
-    for location in locations:
-        print(u"Location: {}".format(location))
-        bot.api.search_location(location)
-        finded_location = bot.api.last_json['items'][0]
-        if finded_location:
-            print(u"Found {}".format(finded_location['title']))
-            like_location_feed(bot, finded_location, amount=int(18))
-            time.sleep(settings['follow_delay'])
-        else:
-            bot.logger.info("LIKE_LOCATION | Location '{}' was not found.".format(location))
+    location = settings['location']
+    print(u"Location: {}".format(location))
+    bot.api.search_location(location)
+    finded_location = bot.api.last_json['items'][0]
+    if finded_location:
+        print(u"Found {}".format(finded_location['title']))
+        like_location_feed(bot, finded_location, amount=int(18))
+        time.sleep(settings['follow_delay'])
+    else:
+        bot.logger.info("LIKE_LOCATION | Location '{}' was not found.".format(location))
     exit(10)
