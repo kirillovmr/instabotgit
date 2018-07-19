@@ -175,6 +175,7 @@ def check_commands():
             exit(99)
         if command['update1'] == 1:
             print("UPDATING BOT (r)")
+            update_command_db('update1', 0, platform.lower())
             my_func.gitfetch(my_func.path())
             time.sleep(5)
 
