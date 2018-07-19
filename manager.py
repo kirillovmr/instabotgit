@@ -3,9 +3,9 @@ import my_telegram
 import my_func
 import time
 
-my_func.gitfetch(my_func.path())
-
 my_telegram.send_mess_tg(my_database.get_admin_tg(), "✅ Manager started on {}".format(my_func.platform()))
+
+my_func.gitfetch(my_func.path())
 
 not_notify = my_database.fill_not_notify_array()
 

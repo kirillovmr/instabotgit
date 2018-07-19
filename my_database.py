@@ -1,6 +1,7 @@
 from sys import platform # mac or linux
 import my_func
 import time
+import os
 import mysql.connector
 
 config = {
@@ -178,6 +179,10 @@ def check_commands():
             update_command_db('update1', 0, platform.lower())
             my_func.gitfetch(my_func.path())
             time.sleep(5)
+        if command['server_restart'] == 1:
+            print("RESTARTING SERVER (r)")
+            update_command_db('server_restart', 0, platform.lower())
+            os.system('reboot')
 
 # Get statuses from database and start/stop bots
 def get_bots_status(not_notify):
