@@ -182,6 +182,7 @@ def check_commands():
         if command['server_restart'] == 1:
             print("RESTARTING SERVER (r)")
             update_command_db('server_restart', 0, platform.lower())
+            my_telegram.send_mess_tg(get_admin_tg(), "⚠️ SERVER going to restart")
             os.system('reboot')
 
 # Get statuses from database and start/stop bots
