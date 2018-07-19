@@ -104,7 +104,10 @@ if settings['follow_type'] == 1:
             bot.api.search_location(location)
             loc = random.randint(0, 6)
             for l in bot.api.last_json['items'][:6]:
-                print(l['title'])
+                try:
+                    print(l['title'])
+                except UnicodeEncodeError:
+                    print("*cant_decode")
             finded_location = bot.api.last_json['items'][loc]
             if finded_location:
                 print("Found {}".format(finded_location['title']))
