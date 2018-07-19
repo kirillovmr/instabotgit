@@ -83,7 +83,7 @@ start_time = datetime.datetime.now()
 while True:
     bot.api.search_location(settings['location'])
     if not bot.api.last_json['items']:
-        print(u'Location was not found')
+        print('Location was not found')
         exit(1)
     try:
         # First location in found array
@@ -95,4 +95,4 @@ while True:
                 now=now_time(), wait=settings['comment_delay'], comments_sent=comments_sent, working=datetime.datetime.now() - start_time))
             time.sleep(settings['comment_delay'] + random.randint(-30, 30))
     except ValueError:
-        print(u"\n Not valid choice. Try again")
+        print("\n Not valid choice. Try again")

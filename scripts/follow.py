@@ -100,14 +100,14 @@ if settings['follow_type'] == 1:
     bot.logger.info("=== SCRIPT 'FOLLOW BY LOCATION' ===")
     while True:
         for location in locations:
-            print(u"Location: {}".format(location))
+            print("Location: {}".format(location))
             bot.api.search_location(location)
             loc = random.randint(0, 6)
             for l in bot.api.last_json['items'][:6]:
                 print(l['title'])
             finded_location = bot.api.last_json['items'][loc]
             if finded_location:
-                print(u"Found {}".format(finded_location['title']))
+                print("Found {}".format(finded_location['title']))
                 follow_location_feed(bot, finded_location, amount=int(18))
                 time.sleep(settings['follow_delay'])
             else:
