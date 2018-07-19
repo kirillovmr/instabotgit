@@ -156,6 +156,8 @@ def download_photo(media_id, folder='photos', filename=None, save_description=Fa
         username = media['user']['username']
 
         # Checking if reposting from self tags feed
+        if users[posted % len(users)][0] == "#":
+            caption = user_caption.format("@" + username)
         if users[posted % len(users)] == settings['login']:
             caption = user_caption.format("@" + username)
         else:

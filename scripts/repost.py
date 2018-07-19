@@ -151,8 +151,10 @@ def download_photo(media_id, folder='photos', filename=None, save_description=Fa
         os.makedirs(folder)
     if save_description:
         media = bot.get_media_info(media_id)[0]
-
-        caption = media['caption']['text']
+        try:
+            caption = media['caption']['text']
+        except TypeError:
+            caption = "Empty"
         username = media['user']['username']
 
         # Checking if reposting from self tags feed
