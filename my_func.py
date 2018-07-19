@@ -23,6 +23,7 @@ def gitfetch(path):
     os.system("git reset --hard FETCH_HEAD")
     os.system("git clean -df")
     print("\n{} Last version received.\n".format(now_time()))
+    my_telegram.send_mess_tg(my_database.get_admin_tg(), "📡 Bot was updated")
 
 # Return True or False if needed to notify via telegram
 def need_notify(not_notify, num):
