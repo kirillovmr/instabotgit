@@ -173,7 +173,10 @@ def check_commands():
             print("MANAGER RESTARTING (r)")
             update_command_db('restart', 0, platform.lower())
             exit(99)
-
+        if command['update1'] == 1:
+            print("UPDATING BOT (r)")
+            my_func.gitfetch(my_func.path())
+            time.sleep(5)
 
 # Get statuses from database and start/stop bots
 def get_bots_status(not_notify):
