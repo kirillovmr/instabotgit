@@ -110,7 +110,8 @@ if settings['follow_type'] == 1:
                     print("*cant_decode")
             finded_location = bot.api.last_json['items'][loc]
             if finded_location:
-                print("Found {}".format(finded_location['title']))
+                try:
+                    print(u"Found {}".format(finded_location['title']))
                 follow_location_feed(bot, finded_location, amount=int(18))
                 time.sleep(settings['follow_delay'])
             else:
