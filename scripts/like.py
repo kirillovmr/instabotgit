@@ -76,12 +76,13 @@ while True:
     for location in locations:
         print("Location: {}".format(location))
         bot.api.search_location(location)
-        finded_location = bot.api.last_json['items'][0]
+        loc = random.randint(0, 5)
+        finded_location = bot.api.last_json['items'][loc]
         if finded_location:
             try:
                 print("Found {}".format(finded_location['title']))
             except UnicodeEncodeError:
-                print()
+                print("Found *cant_decode")
             like_location_feed(bot, finded_location, amount=int(18))
             time.sleep(settings['follow_delay'])
         else:
