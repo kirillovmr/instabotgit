@@ -1,4 +1,5 @@
 from sys import platform # mac or linux
+import my_telegram
 import my_func
 import time
 import os
