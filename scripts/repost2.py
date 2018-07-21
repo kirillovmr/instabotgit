@@ -108,6 +108,44 @@ def repost_photo(bot, new_media_id, path=POSTED_MEDIAS):
         if bot.upload_photo(photo_path, text):
             update_posted_medias(new_media_id, path)
             bot.logger.info('Media_id {0} is saved in {1}'.format(new_media_id, path))
+
+            # Getting last photo
+            feed = bot.get_your_medias()
+            post_to_comment = feed[0]
+
+            # Commenting last photo
+            hashtag = users[posted % len(users)]
+            if hashtag[0] == "#":
+                hashtag = hashtag[1:]
+            if hashtag == settings['login']:
+                print(1)
+
+                # Putting hashtags in array
+                hashtags_tmp = settings['like_hashtags']
+                hashtags = [] # Initializing empty array
+                while hashtags_tmp.find(" ") >= 0:
+                    pos = hashtags_tmp.find(" ")
+                    hashtags.append(hashtags_tmp[:pos])
+                    hashtags_tmp = hashtags_tmp[pos+1:]
+                hashtags.append(hashtags_tmp) # Appending to array last hashtag
+
+                medias = bot.get_hashtag_medias(hashtags[0], filtration=False)
+            else:
+                print(2)
+                medias = bot.get_hashtag_medias(hashtag, filtration=False)
+
+            medias = medias[:10]
+
+            authors = []
+            for media in medias:
+                authors.append(bot.get_username_from_user_id(bot.get_media_owner(media)))
+
+            comment = settings['comment']
+            for author in authors:
+                comment += ' @{}'.format(author)
+            print(comment)
+            bot.comment(post_to_comment, comment)
+
             return True
         else:
             print("not posted")
@@ -151,8 +189,10 @@ def download_photo(media_id, folder='photos', filename=None, save_description=Fa
         os.makedirs(folder)
     if save_description:
         media = bot.get_media_info(media_id)[0]
-
-        caption = media['caption']['text']
+        try:
+            caption = media['caption']['text']
+        except TypeError:
+            caption = "Empty"
         username = media['user']['username']
 
         # Checking if reposting from self tags feed
