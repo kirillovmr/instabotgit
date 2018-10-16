@@ -5,68 +5,47 @@ from sys import platform # mac or linux
 import huepy # for color print
 from datetime import datetime
 from tqdm import tqdm
+import func
 
-hello = '''
-    _________________________________________
+# Объявляем переменные
+bad_users = {}
+followers_id_name = {}
+madiaid_code = {}
 
-    INSTAGRAM Follower checker by @kirillovmr
-    _________________________________________
-'''
+# Приветственное сообщение
+print(func.hello.format(func.scriptName['check_hashtags']))
 
-print(hello)
-
-if "darwin" in platform.lower():
-    print("\tЗапущено на платформе MAC OS\n")
-    path_ = "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/instabot"
-elif "linux" in platform.lower():
-    print("\tЗапущено на платформе LINUX\n")
-    path_ = "/usr/local/lib/python3.5/dist-packages/instabot"
-elif "win32" in platform.lower():
-    print("\tЗапущено на платформе WINDOWS\n")
-    path_ = "c:\\users\\user\\appdata\\local\\programs\\python\\python37\\lib\\site-packages\\instabot"
-else:
+# Выводит платформу
+print("\tЗапущено на платформе " +  func.getOs() + "\n")
+path_ = func.getPath()
+if path_ == None:
     print("This platform is not supported. Exiting...")
     exit()
 
-def console_print(text, color=None):
-    if color is not None:
-        text = getattr(huepy, color)(text)
-    print(text)
-
+# Получаем вводные данные
 hashtag = input(getattr(huepy, "purple")("Введите хештег (без #): "))
 amount = int(input(getattr(huepy, "purple")("Введите количество публикаций по хештегу: ")))
 print(' ')
 
+# Подключаем бота
 sys.path.append(path_)
 from instabot import Bot, utils
 
-login = "_friendly_company"
-password = "arina4ever699516"
-proxy = "http://oxanaroma:A0z2CkV@185.252.24.51:65233"
-proxy = ""
-post_link = "https://www.instagram.com/p/"
-result_filename = 'result.txt'
-vip_filename = 'vip.txt'
-
-# Creating folders
-dir = "{}/accs/{}/a".format(path_, login)
-dir0 = "{}/accs/{}".format(path_, login)
+# Создаем папки
+dir = "{}/accs/{}/a".format(path_, func.login)
+dir0 = "{}/accs/{}".format(path_, func.login)
 if not os.path.exists(dir):
     os.makedirs(dir)
 if not os.path.exists(dir0 + '/hashtags'):
     os.makedirs(dir0 + '/hashtags')
 
-# Changing directory to instabot/accs/bot_id
+# Меняем директорию to instabot/accs/bot_id
 os.chdir(dir)
 
 bot = Bot()
-bot.login(username=login, password=password, proxy=proxy)
-
-# Creating dict of bad users
-bad_users = {}
+bot.login(username=func.login, password=func.password, proxy=func.proxy)
 
 # Loading id -> username dict
-followers_id_name = {}
 try:
     f = open('usernames.txt', 'r')
     for line in f:
@@ -80,29 +59,25 @@ try:
 except:
     print("Loaded file with usernames was not found.")
 
-# Get list of VIP Users
-vip = bot.read_list_from_file('../' + vip_filename)
-
-# Deleting repeated items
+# Получаем список ВИПОВ
+vip = bot.read_list_from_file('../' + func.vip_filename)
+# Удаляем повторяющиеся имена
 vip = list(set(vip))
 
-# Converting usernames to id
+# Конвертируем usernames to id
 vip_id = []
 for v in vip:
     vip_id.append(bot.convert_to_user_id(v))
 
-# Getting followers
+# Получаем список подписчиков
 followers = bot.followers
 
-# Removing vip users from followers
+# Убираем ВИПОВ из followers
 users_to_check = [x for x in followers if x not in vip_id]
 
 h = bot.get_total_hashtag_medias(hashtag, amount=amount, filtration=False)
-# Deleting repeated items
+# Удаляем повторяющиеся имена
 posts = list(set(h))
-
-# users_to_check = users_to_check[0:10]
-# posts = posts[0:10]
 
 # Получаем список лайков под всеми фото в хештеге
 new_posts = []
@@ -127,7 +102,6 @@ for user in tqdm(users_to_check, desc="Проверяем лайки"):
                 bad_users[user]["proof"] = []
                 bad_users[user]["proof"].append(post['post'])
 
-madiaid_code = {}
 # [PROOF] Convert media id to link
 for u in tqdm(bad_users, desc="Конвертация"):
     id = bad_users[u]["username"]
@@ -145,16 +119,16 @@ for u in tqdm(bad_users, desc="Конвертация"):
             media_info = bot.get_media_info(post_id)
             code = media_info[0]['code']
             madiaid_code[post_id] = code
-        proofs_link.append(post_link + code)
+        proofs_link.append(func.post_link + code)
     bad_users[u]["proof"] = proofs_link
 
-# Saving usernames dict
+# Сохраняем словарь usernames
 f = open('usernames.txt', 'w')
 for u in followers_id_name:
     f.write(u + ':' + followers_id_name[u] + '\n')
 f.close()
 
-# Export results in file
+# Экспортируем результаты
 date = datetime.today().strftime("%d.%m.%Y %H;%M")
 result_filename = date + '.txt'
 f = open('../hashtags/' + result_filename, 'w')
@@ -168,6 +142,6 @@ for u in bad_users:
     f.write('\n\n')
 f.close()
 
-console_print('\n\tКоличество аккаунтов не выполнивших условия: {}\n'.format(len(bad_users)), color='purple')
-console_print('Результаты сохранены в файле {}\n'.format(result_filename), color='purple')
+func.console_print('\n\tКоличество аккаунтов не выполнивших условия: {}\n'.format(len(bad_users)), color='purple')
+func.console_print('Результаты сохранены в файле {}\n'.format(result_filename), color='purple')
 input("")
